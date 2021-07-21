@@ -1,8 +1,8 @@
-package com.allan.amca;
-public final class User implements UserFactory {
+package com.allan.amca.user;
+public abstract class User implements Person {
 
-    private final String    firstName;
-    private final String    lastName;
+    private String          firstName;
+    private String          lastName;
     private final String    password;
 
     protected User(final String firstName, final String lastName, final String password) {
@@ -11,18 +11,6 @@ public final class User implements UserFactory {
         this.lastName = lastName;
         this.password = password;
     }
-
-    @Override
-    final public User CreateUser(UserType type) {
-        final User user;
-
-        switch (type) {
-            case USER -> user = new User(firstName, lastName, password);
-            default -> throw new IllegalArgumentException("User is undefined");
-        }
-        return user;
-    }
-
 
     private static void validateUser(final String firstName,
                                      final String lastName, final String password) {
@@ -49,9 +37,16 @@ public final class User implements UserFactory {
         return password;
     }
 
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
-        final String userInfo = this.getFirstName() + " " + this.getLastName();
-        return userInfo;
+        return this.getFirstName() + " " + this.getLastName();
     }
 }

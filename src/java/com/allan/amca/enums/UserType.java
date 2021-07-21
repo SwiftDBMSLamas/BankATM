@@ -1,4 +1,4 @@
-package com.allan.amca;
+package com.allan.amca.enums;
 
 public enum UserType {
     USER

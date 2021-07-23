@@ -11,7 +11,11 @@ public class UserFactoryGenerator implements UserFactory {
         if (type == UserType.USER) {
             user = new Client(firstName, lastName, password);
         } else{
+<<<<<<< HEAD
+            throw new IllegalArgumentException("com.allan.amca.Login.User is undefined");
+=======
             throw new IllegalArgumentException("User is undefined");
+>>>>>>> master
         }
         return user;
     }

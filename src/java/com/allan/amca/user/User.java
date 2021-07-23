@@ -3,11 +3,7 @@ public abstract class User implements Person {
 
     private String          firstName;
     private String          lastName;
-<<<<<<< HEAD:src/java/com/allan/amca/user/User.java
     private String          password;
-=======
-    private final String    password;
->>>>>>> master:src/java/com/allan/amca/User.java
 
     protected User(final String firstName, final String lastName, final String password) {
         validateUser(firstName, lastName, password);
@@ -49,13 +45,11 @@ public abstract class User implements Person {
         this.lastName = lastName;
     }
 
-<<<<<<< HEAD:src/java/com/allan/amca/user/User.java
     public void setPassword(final String password) {
         this.password = password;
     }
 
-=======
->>>>>>> master:src/java/com/allan/amca/User.java
+
     @Override
     public String toString() {
         return this.getFirstName() + " " + this.getLastName();

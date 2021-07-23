@@ -1,16 +1,13 @@
-package com.allan.amca;
+package com.allan.amca.login;
 
 import java.sql.*;
 
-public class Login {
+public class Login extends LoginViewModel {
 
-//    User can login with client card and password
-//    As a user, I want to login using my client card and password so that I can make a transaction
-//    As a user, I want to reset my password so that I can login
     private static final Login instance = new Login();
 
     private Login() {}
-
+// Can refactor this into a result class.. call the method
     public boolean login(final String clientID, final String password) {
         final String url = "jdbc:mysql://localhost:3306/";
         final Statement state;
@@ -26,7 +23,6 @@ public class Login {
             if (result.next()) {
                 resultValid = true;
             }
-            System.out.println(result.next());
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
@@ -36,7 +32,7 @@ public class Login {
     public void resetPw() {
 //        TODO: add code, code will update database with new password
     }
-
+//    Singleton access
     public static Login getInstance() {
         return instance;
     }

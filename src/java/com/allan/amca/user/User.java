@@ -3,7 +3,7 @@ public abstract class User implements Person {
 
     private String          firstName;
     private String          lastName;
-    private final String    password;
+    private String          password;
 
     protected User(final String firstName, final String lastName, final String password) {
         validateUser(firstName, lastName, password);
@@ -43,6 +43,10 @@ public abstract class User implements Person {
 
     public void setLastName(final String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     @Override

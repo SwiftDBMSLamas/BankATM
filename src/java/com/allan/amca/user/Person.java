@@ -1,7 +1,7 @@
 package com.allan.amca.user;
 
 public interface Person {
-    String getClientID();
+    Long getClientID();
     String getFirstName();
     String getLastName();
     String getPassword();

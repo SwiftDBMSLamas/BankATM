@@ -1,6 +1,8 @@
 package com.allan.amca.transaction;
 
-public abstract class Transaction {
+import com.allan.amca.user.Client;
+
+public abstract class Transaction implements Transactional {
     private Long accountNumber;
 
     public Transaction(final Long accountNumber) {
@@ -11,9 +13,20 @@ public abstract class Transaction {
         return accountNumber;
     }
 
-    public void performTransaction(){
-        execute();
+    public final void performTransaction(final TransactionType type,
+                                         final Long client,
+                                         final Double amount){
+//        if (!(type == TransactionType.DEPOSIT) || !(type == TransactionType.WITHDRAWAL)) {
+//            throw new IllegalArgumentException("Unknown transaction type.. aborting");
+//        }
+        executeTransaction(client, amount);
     }
 
-    protected abstract void execute();
+    public final void updateBalance(final Client client, final Double amount) {
+        final String updateBal = "UPDATE account " +
+                "SET balance =  '" ;
+
+    }
+
+    protected abstract void executeTransaction(Long client, Double amount);
 }

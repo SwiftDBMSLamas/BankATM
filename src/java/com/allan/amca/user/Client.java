@@ -12,7 +12,6 @@ public class Client extends User {
     }
 
     public Long getClientID() {
-        retrieveID();
         return clientCardID;
     }
 
@@ -33,8 +32,9 @@ public class Client extends User {
                     "WHERE first_name = '" + this.getFirstName() + "'" +
                     "AND last_name ='" + this.getLastName() + "'" +
                     "AND password ='" + this.getPassword() + "';");
-
+            System.out.println(resultSet.next());
             if (resultSet.next()) {
+                System.out.println("Assigning ID...");
                 clientCardID = resultSet.getLong(1);
             }
         } catch (SQLException ex) {

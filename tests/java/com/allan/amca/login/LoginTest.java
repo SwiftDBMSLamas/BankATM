@@ -1,6 +1,6 @@
 package com.allan.amca.login;
 
-import com.allan.amca.data.DatabaseHelper;
+import com.allan.amca.data.DatabaseHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,11 +20,11 @@ class LoginTest {
 
     @Test
     void login() {
-        final DatabaseHelper db = DatabaseHelper.getInstance();
+        final DatabaseHandler db = DatabaseHandler.newInstance();
         final Login login = Login.getInstance();
 //        expected, actual
-        assertFalse(login.login("4519011123012301", "pass2"));
-        assertTrue(login.login("4519011123012301", "testing1pass"));
+        assertFalse(login.login(4519011123012301L, "pass2"));
+        assertTrue(login.login(4519011123012301L, "testing1pass"));
 
     }
 }

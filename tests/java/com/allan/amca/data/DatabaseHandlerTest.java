@@ -1,14 +1,11 @@
 package com.allan.amca.data;
 
-import com.allan.amca.data.DatabaseHelper;
 import com.allan.amca.user.Client;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
-
-class DatabaseHelperTest {
+class DatabaseHandlerTest {
 
     @BeforeEach
     void setUp() {
@@ -24,7 +21,7 @@ class DatabaseHelperTest {
 
     @Test
     void addClient() {
-        final DatabaseHelper db = DatabaseHelper.getInstance();
+        final DatabaseHandler db = DatabaseHandler.newInstance();
         final Client client1 = new Client("Allan", "Aranzaso", "allanaranzaso");
         final Client client2 = new Client("Jungkook", "Jeon", "jeonjungkookkkk4");
 

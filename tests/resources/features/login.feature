@@ -4,21 +4,16 @@ Feature: Login
     User navigates to ATM selection page Given
     I am on the ATM login page
 
-    Scenario Outline: Login functionality for bank ATM
-      Given User opens the ATM application
-      When I enter username "<username>" and I enter password as "<password>"
-      Then Login should be successful
-      Examples:
-        | username         | password    |
-        | 4519011123012324 | password1   |
-        | 4519011123012325 | password2   |
-        | 4519011123012326 | password3   |
+  Scenario Outline: Login functionality for bank ATM
+    Given User opens the ATM application
+    When I enter username <username> and I enter password as "<password>"
+    Then Login should be successful
+    Examples:
+      | username         | password      |
+      | 4519011123012346 | password134   |
+      | 4519011123012356 | password134   |
+      | 4519011123012366 | password134   |
 
-#  Scenario:
-#    When I enter username as "1234567890"
-#    And I enter password as "test"
-#    Then Login should be successful
-#
   Scenario:
-    When I enter username "1234567890" and I enter password as "fail"
+    When I enter username 4519011123012350 and I enter password as "password100"
     Then Login should fail

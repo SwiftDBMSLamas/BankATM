@@ -8,7 +8,7 @@ public class Login extends LoginViewModel {
 
     private Login() {}
 // Can refactor this into a result class.. call the method
-    public boolean login(final String clientID, final String password) {
+    public boolean login(final Long clientID, final String password) {
         final String url = "jdbc:mysql://localhost:3306/";
         final Statement state;
         final ResultSet result;
@@ -19,7 +19,7 @@ public class Login extends LoginViewModel {
 
             result = state.executeQuery("SELECT client_id, password " +
                     "FROM client " +
-                    "WHERE client_id ='" + clientID + "'" + "AND password ='" + password + "'");
+                    "WHERE client_id =" + clientID + " " + "AND password ='" + password + "'");
             if (result.next()) {
                 resultValid = true;
             }
@@ -29,9 +29,6 @@ public class Login extends LoginViewModel {
         return resultValid;
     }
 
-    public void resetPw() {
-//        TODO: add code, code will update database with new password
-    }
 //    Singleton access
     public static Login getInstance() {
         return instance;

@@ -7,7 +7,7 @@ public class Login extends LoginViewModel {
     private static final Login instance = new Login();
 
     private Login() {}
-// Can refactor this into a result class.. call the method
+// Can refactor this into a result class. call the method
     public boolean login(final Long clientID, final String password) {
         final String url = "jdbc:mysql://localhost:3306/";
         final Statement state;

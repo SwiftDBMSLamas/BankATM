@@ -13,8 +13,6 @@ public class DepositTest {
     @When("I enter my client card as {long} and the amount to deposit as {double}")
     public void i_enter_my_client_card_as_and_the_amount_to_deposit_as(final Long clientID,
                                                                        final Double amtToDeposit) {
-        Transactional t = new Deposit(clientID);
-        t.performTransaction(TransactionType.DEPOSIT, clientID, amtToDeposit);
     }
     @Then("Deposit should be successful")
     public void deposit_should_be_successful() {

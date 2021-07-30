@@ -13,7 +13,8 @@ public abstract class User implements Person {
     }
 
     private static void validateUser(final String firstName,
-                                     final String lastName, final String password) {
+                                     final String lastName,
+                                     final String password) {
         if (firstName == null || firstName.isEmpty()) {
             throw new IllegalArgumentException("First name cannot be empty");
         }
@@ -48,7 +49,6 @@ public abstract class User implements Person {
     public void setPassword(final String password) {
         this.password = password;
     }
-
 
     @Override
     public String toString() {

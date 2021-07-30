@@ -1,32 +1,83 @@
 package com.allan.amca.transaction;
 
-import com.allan.amca.user.Client;
+import com.allan.amca.account.AccountDatabaseImpl;
+import com.allan.amca.data.Resources;
 
-public abstract class Transaction implements Transactional {
-    private Long accountNumber;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-    public Transaction(final Long accountNumber) {
-        this.accountNumber = accountNumber;
+public abstract class Transaction
+        extends TransactionFactory
+        implements Transactional {
+
+    private final String transactionDate;
+    private double transactionAmount;
+    private static final String DB_URI  = Resources.getDBUri();
+    private static final String DB_USER = Resources.getDBUsername();
+    private static final String DB_PASS = Resources.getDBPassword();
+
+    public Transaction(final String transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
-    public Long getAccountNumber() {
-        return accountNumber;
+    public String getTransactionDate() {
+        return transactionDate;
     }
 
-    public final void performTransaction(final TransactionType type,
-                                         final Long client,
-                                         final Double amount){
-//        if (!(type == TransactionType.DEPOSIT) || !(type == TransactionType.WITHDRAWAL)) {
-//            throw new IllegalArgumentException("Unknown transaction type.. aborting");
-//        }
-        executeTransaction(client, amount);
+    public String getTransactionType() {
+        final String classType = this.getClass().toString().toLowerCase();
+        String prettyType = null;
+
+        if (classType.contains("withdrawal")) {
+            prettyType = "withdrawal";
+        } else if (classType.contains("deposit")) {
+            prettyType = "deposit";
+        }
+        return prettyType;
     }
 
-    public final void updateBalance(final Client client, final Double amount) {
-        final String updateBal = "UPDATE account " +
-                "SET balance =  '" ;
-
+    public double getTransactionAmount() {
+        return transactionAmount;
     }
 
-    protected abstract void executeTransaction(Long client, Double amount);
+    @Override
+    public final boolean performTransaction(final long clientID,
+                                            final Double amount){
+        final String UPDATE_QUERY = "UPDATE account SET balance = ? WHERE clientID = ?;";
+        final double INVALID_AMT = 0.0;
+        final double currentBalance;
+        final double newBalance;
+        final int recordsUpdated;
+        boolean transactionSuccess = false;
+        transactionAmount = amount;
+        currentBalance = AccountDatabaseImpl.retrieveBalance(clientID);
+
+        if (currentBalance < amount) {
+            throw new IllegalStateException("You do not have enough funds to withdraw the entered amount");
+        } else if (amount <= INVALID_AMT) {
+            throw new IllegalStateException("You have entered an invalid amount to deposit");
+        }
+
+        newBalance = calculate(currentBalance, transactionAmount);
+        try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PASS)) {
+            try (PreparedStatement transaction = connection.prepareStatement(UPDATE_QUERY)) {
+                connection.setAutoCommit(false);
+                transaction.setDouble(1, newBalance);
+                transaction.setLong(2, clientID);
+
+                recordsUpdated = transaction.executeUpdate();
+                if (recordsUpdated > 0) {
+                    transactionSuccess = true;
+                }
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return transactionSuccess;
+    }
+
+    protected abstract double calculate(double currentBalance, double amount);
 }

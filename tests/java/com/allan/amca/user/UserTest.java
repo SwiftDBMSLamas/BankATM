@@ -14,7 +14,7 @@ public class UserTest {
 //    }
 //    @When("I enter client ID as {string} and I enter password as {string}")
 //    public void i_enter_an_invalid_client_id_as(final String arg1, final String arg2) {
-////        com.allan.amca.Login.User user = userFactory.CreateUser(UserType.USER, arg1, arg1, arg2);
+////        com.allan.amca.Login.User = userFactory.CreateUser(UserType.USER, arg1, arg1, arg2);
 //    }
 //
 //    @Then("Registration should be successful")

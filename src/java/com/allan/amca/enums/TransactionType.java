@@ -1,4 +1,4 @@
-package com.allan.amca.transaction;
+package com.allan.amca.enums;
 
 public enum TransactionType {
     WITHDRAWAL,

@@ -1,6 +1,6 @@
 package com.allan.amca.transaction;
 
-import com.allan.amca.account.AccountDatabaseImpl;
+import com.allan.amca.account.AccountDaoImpl;
 import com.allan.amca.data.Resources;
 
 import java.sql.Connection;
@@ -12,11 +12,12 @@ public abstract class Transaction
         extends TransactionFactory
         implements Transactional {
 
-    private final String transactionDate;
-    private double transactionAmount;
-    private static final String DB_URI  = Resources.getDBUri();
-    private static final String DB_USER = Resources.getDBUsername();
-    private static final String DB_PASS = Resources.getDBPassword();
+    private final String        transactionDate;
+    private double              transactionAmount;
+    private final AccountDaoImpl accountDao = new AccountDaoImpl();
+    private static final String DB_URI      = Resources.getDBUri();
+    private static final String DB_USER     = Resources.getDBUsername();
+    private static final String DB_PASS     = Resources.getDBPassword();
 
     public Transaction(final String transactionDate) {
         this.transactionDate = transactionDate;
@@ -52,7 +53,7 @@ public abstract class Transaction
         final int recordsUpdated;
         boolean transactionSuccess = false;
         transactionAmount = amount;
-        currentBalance = AccountDatabaseImpl.retrieveBalance(clientID);
+        currentBalance = accountDao.getAccountBalance(clientID);
 
         if (currentBalance < amount) {
             throw new IllegalStateException("You do not have enough funds to withdraw the entered amount");

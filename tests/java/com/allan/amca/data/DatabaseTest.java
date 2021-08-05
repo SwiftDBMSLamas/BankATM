@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DatabaseTest {
-    DatabaseHandler db;
+    UserDaoImpl db;
     Client newUser;
     Client updatedUser;
     long deleteID;
@@ -17,7 +17,7 @@ public class DatabaseTest {
 
     @Given("I want to create a new user")
     public void i_want_to_create_a_new_user() {
-        db = DatabaseHandler.newInstance();
+        db = UserDaoImpl.newInstance();
     }
     @When("I enter my first name as {string}, my last name as {string}, and my password as {string}")
     public void i_enter_my_first_name_as_my_last_name_as_and_my_password_as(final String firstName,
@@ -33,7 +33,7 @@ public class DatabaseTest {
 
     @Given("I want to delete a current user")
     public void i_want_to_delete_a_current_user() {
-        db = DatabaseHandler.newInstance();
+        db = UserDaoImpl.newInstance();
     }
     @When("I enter my client card as {long}")
     public void i_enter_my_client_card_as(final long idToDelete) {
@@ -56,7 +56,7 @@ public class DatabaseTest {
      */
     @Given("I want to update a user's information")
     public void i_want_to_update_a_user_s_information() {
-        db = DatabaseHandler.newInstance();
+        db = UserDaoImpl.newInstance();
     }
     @When("I enter my client card as {long} and I enter my new first name as " +
             "{string} and my last name as {string} and my password as {string}")

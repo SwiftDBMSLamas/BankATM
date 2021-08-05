@@ -3,10 +3,12 @@ package com.allan.amca.account;
 import com.allan.amca.data.Resources;
 
 import java.sql.*;
+import java.util.List;
 
-public class AccountDatabaseImpl {
+public class AccountDaoImpl implements AccountDao {
 
-    public static double retrieveBalance(final long accountID) {
+    @Override
+    public double getAccountBalance(final long accountID) {
         final String url          = Resources.getDBUri();
         final String dbUser       = Resources.getDBUsername();
         final String password     = Resources.getDBPassword();
@@ -31,5 +33,20 @@ public class AccountDatabaseImpl {
             ex.printStackTrace();
         }
         return retrievedBalance;
+    }
+
+    @Override
+    public List<Account> getAllAccounts() {
+        return null;
+    }
+
+    @Override
+    public Account getAccount(long clientID) {
+        return null;
+    }
+
+    @Override
+    public boolean updateAccountBalance(double newBalance) {
+        return false;
     }
 }

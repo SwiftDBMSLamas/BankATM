@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
-public final class DatabaseHandler implements Handler {
+public final class UserDaoImpl implements UserDao {
 //    Resources
     private static final String DB_URI          = Resources.getDBUri();
     private static final String DB_USER         = Resources.getDBUsername();
@@ -31,11 +31,11 @@ public final class DatabaseHandler implements Handler {
 //    DML commands
     private static final String ADD_NEW_USER   = "INSERT INTO " + TABLE_CLIENT;
 
-    private static final DatabaseHandler instance     = new DatabaseHandler();
+    private static final UserDaoImpl instance     = new UserDaoImpl();
 
-    private DatabaseHandler(){}
+    private UserDaoImpl(){}
 
-    public static DatabaseHandler newInstance() {
+    public static UserDaoImpl newInstance() {
         return instance;
     }
 

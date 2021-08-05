@@ -4,7 +4,7 @@ import com.allan.amca.user.Client;
 
 import java.sql.SQLException;
 
-public interface Handler {
+public interface UserDao {
 
     void onCreate();
     boolean addClient(Client toAdd) throws SQLException;

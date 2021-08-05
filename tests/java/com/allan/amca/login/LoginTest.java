@@ -1,6 +1,6 @@
 package com.allan.amca.login;
 
-import com.allan.amca.data.DatabaseHandler;
+import com.allan.amca.data.UserDaoImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class LoginTest {
 
     @Test
     void login() {
-        final DatabaseHandler db = DatabaseHandler.newInstance();
+        final UserDaoImpl db = UserDaoImpl.newInstance();
         final Login login = Login.getInstance();
 //        expected, actual
         assertFalse(login.login(4519011123012301L, "pass2"));

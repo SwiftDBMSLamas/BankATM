@@ -1,5 +1,7 @@
 package com.allan.amca.login;
 
+import com.allan.amca.data.Resources;
+
 import java.sql.*;
 
 public class Login extends LoginViewModel {
@@ -9,22 +11,25 @@ public class Login extends LoginViewModel {
     private Login() {}
 // Can refactor this into a result class. call the method
     public boolean login(final Long clientID, final String password) {
-        final String url = "jdbc:mysql://localhost:3306/";
-        final Statement state;
+        final String URI            = Resources.getDBUri();
+        final String DB_USER        = Resources.getDBUsername();
+        final String DB_PW          = Resources.getDBPassword();
+        final String LOGIN_QUERY    = "SELECT client_id, password FROM client WHERE client_id = ? AND password = ?;";
         final ResultSet result;
         boolean resultValid = false;
-        try (Connection connection = DriverManager.getConnection(url, "root", "allanaranzaso")) {
-            state = connection.createStatement();
-            state.execute("USE Clients");
 
-            result = state.executeQuery("SELECT client_id, password " +
-                    "FROM client " +
-                    "WHERE client_id =" + clientID + " " + "AND password ='" + password + "'");
-            if (result.next()) {
-                resultValid = true;
+        try (Connection connection = DriverManager.getConnection(URI, DB_USER, DB_PW)) {
+            try (PreparedStatement validateLogin = connection.prepareStatement(LOGIN_QUERY)) {
+                validateLogin.setLong(1, clientID);
+                validateLogin.setString(2, password);
+                result = validateLogin.executeQuery();
+                if (result.next()) {
+                    resultValid = true;
+                    System.out.println("Login successful!");
+                }
             }
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
+            ex.printStackTrace();
         }
         return resultValid;
     }

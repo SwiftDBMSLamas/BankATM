@@ -1,12 +1,13 @@
 package com.allan.amca.data;
 
 import com.allan.amca.user.Client;
+import com.allan.amca.user.UserFactory;
 import com.allan.amca.user.UserFactoryGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
-public final class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements UserDao {
 //    Resources
     private static final String DB_URI          = Resources.getDBUri();
     private static final String DB_USER         = Resources.getDBUsername();
@@ -33,7 +34,7 @@ public final class UserDaoImpl implements UserDao {
 
     private static final UserDaoImpl instance     = new UserDaoImpl();
 
-    private UserDaoImpl(){}
+    public UserDaoImpl(){}
 
     public static UserDaoImpl newInstance() {
         return instance;
@@ -237,13 +238,15 @@ public final class UserDaoImpl implements UserDao {
         final String lastName;
         final String pw;
         final Client client;
+        final UserFactory generateUser;
 
         clientID = resultSet.getLong(CLIENT_ID_COL);
         firstName = resultSet.getString(FIRST_NAME_COL);
         lastName = resultSet.getString(LAST_NAME_COL);
         pw = resultSet.getString(PASSWORD_COL);
 
-        client = UserFactoryGenerator.CreateUser(firstName, lastName, pw);
+        generateUser = UserFactoryGenerator.createFactory();
+        client = generateUser.createUser(firstName, lastName, pw);
         client.setClientID(clientID);
 
         return client;

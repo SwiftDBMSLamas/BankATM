@@ -6,6 +6,7 @@ public class Client extends User {
 
     private long clientCardID;
     private static HashMap<Integer, Client> clientMap;
+
     static
     {
         clientMap = new HashMap<>();
@@ -61,4 +62,7 @@ public class Client extends User {
         return clientMap.get(request);
     }
 
+    public static void dispose() {
+        clientMap.clear();
+    }
 }

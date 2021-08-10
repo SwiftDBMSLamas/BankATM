@@ -1,7 +1,14 @@
 package com.allan.amca.gui;
 
+import com.allan.amca.data.DaoAbstract;
+import com.allan.amca.data.DaoFactory;
+import com.allan.amca.data.DaoFactoryGenerator;
 import com.allan.amca.data.UserDaoImpl;
+import com.allan.amca.enums.DaoType;
+import com.allan.amca.enums.TransactionType;
 import com.allan.amca.login.Login;
+import com.allan.amca.transaction.Transaction;
+import com.allan.amca.transaction.TransactionFactory;
 import com.allan.amca.user.Client;
 
 import javax.swing.*;
@@ -27,9 +34,11 @@ public class Screen extends JFrame {
     private static final int        SEND_CLIENT_REQUEST = 1;
     private CardLayout card;
     private GridBagConstraints c;
+    private DaoFactory dao;
 
     public Screen() {
         initLogin();
+        dao = DaoFactoryGenerator.createFactory();
         System.out.println("Current client: " + Client.getClient(1));
     }
 
@@ -97,8 +106,7 @@ public class Screen extends JFrame {
 
             authenticated = login.login(clientCard, password);
             if (authenticated) {
-
-                client = UserDaoImpl.newInstance().getClient(clientCard);
+                client = UserDaoImpl.newInstance().retrieve(clientCard);
 
                 Client.sendClient(SEND_CLIENT_REQUEST, client);
                 SelectionMenu sm = new SelectionMenu();
@@ -106,7 +114,6 @@ public class Screen extends JFrame {
                 clientCardInputField.setText(null);
                 clientPINPasswordField.setText(null);
                 card.show(cardPane, "Selection");
-                System.out.println(card.toString());
             }
             //TODO: initialize the screens without saying new
         });
@@ -278,6 +285,10 @@ public class Screen extends JFrame {
             returnBtn.addActionListener(event -> card.show(cardPane, "Selection"));
             depositBtn.addActionListener( event -> {
                 // deposit method
+                final double depositAmt = Double.parseDouble(depositTxtField.getText());
+                final Transaction depositTransaction = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
+
+                depositTransaction.performTransaction(client.getClientID(), depositAmt);
             });
         }
 
@@ -334,6 +345,10 @@ public class Screen extends JFrame {
             returnBtn.addActionListener(event -> card.show(cardPane, "Selection"));
             withdrawBtn.addActionListener( event -> {
                 // withdraw method
+                final double withdrawalAmt = Double.parseDouble(withdrawTxtField.getText());
+                final Transaction withdrawalT = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
+
+                withdrawalT.performTransaction(client.getClientID(),withdrawalAmt);
             });
         }
 
@@ -396,10 +411,14 @@ public class Screen extends JFrame {
         @Override
         public void addListeners() {
             returnBtn.addActionListener( event -> {
-                System.out.println("Current frame: " + frame.getTitle());
-                frame.setTitle("ATM - Selection");
-                System.out.println("New frame: " + frame.getTitle());
                 card.show(cardPane, "Selection");
+            });
+            printBalanceBtn.addActionListener( event -> {
+
+                System.err.println("Client's current balance: ");
+                DaoAbstract accountDao = dao.createDao(DaoType.ACCOUNT);
+                Double balance = (Double) accountDao.retrieve(client.getClientID());
+                System.out.println(balance);
             });
         }
 

@@ -6,11 +6,6 @@ public abstract class User implements Person {
     private String          password;
 
     /**
-     * No-args default constructor
-     */
-    protected User(){}
-
-    /**
      * Constructor to create a new user
      * @param firstName The user's first name. Cannot be null or empty.
      * @param lastName The user's last name. Cannot be null or empty.
@@ -33,14 +28,19 @@ public abstract class User implements Person {
     private static void validateUser(final String firstName,
                                      final String lastName,
                                      final String password) {
+        final String FIRST_EMPTY = "First name cannot be empty";
+        final String LAST_EMPTY  = "Last name cannot be empty";
+        final String PW_EMPTY    = "PIN must be minimum 4 characters or more";
+        final int   PIN_LIMIT    = 4;
+
         if (firstName == null || firstName.isEmpty()) {
-            throw new IllegalArgumentException("First name cannot be empty");
+            throw new IllegalArgumentException(FIRST_EMPTY);
         }
         if (lastName == null || lastName.isEmpty()) {
-            throw new IllegalArgumentException("Last name cannot be empty");
+            throw new IllegalArgumentException(LAST_EMPTY);
         }
-        if (password == null || password.length() < 7) {
-            throw new IllegalArgumentException("Password must be more than 8 characters");
+        if (password == null || password.length() < PIN_LIMIT) {
+            throw new IllegalArgumentException(PW_EMPTY);
         }
     }
 

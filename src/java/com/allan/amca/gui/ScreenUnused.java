@@ -2,7 +2,9 @@ package com.allan.amca.gui;
 
 import javax.swing.*;
 
-//TODO: create screens.. whenever move from one screen to next, remove all and then call the method
+/**
+ * @deprecated see Screen.java
+ */
 public class ScreenUnused extends JFrame {
     public JFrame Mainframe;
     public static JTextField clientCardInputField;

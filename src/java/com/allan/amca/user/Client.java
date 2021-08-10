@@ -2,6 +2,10 @@ package com.allan.amca.user;
 
 import java.util.HashMap;
 
+/**
+ * Client class
+ * @author allanaranzaso
+ */
 public class Client extends User {
 
     private long clientCardID;
@@ -40,7 +44,7 @@ public class Client extends User {
 
     /**
      * Pass client from one class to another by adding client object to the Map
-     * @param request the type of request to put into the key value.
+     * @param request the type of request to put into the key value. For purposes of this project, request is 1.
      * @param clientObj the client object to send
      * @return the client object you are sending. Actual return may not be needed.
      */
@@ -49,19 +53,22 @@ public class Client extends User {
             clientMap = new HashMap<>();
         }
         clientMap.put(request, clientObj);
-        System.out.println(getClient(1).toString());
         return clientObj;
     }
 
     /**
      * Retrieves the client from the Map using the request key
-     * @param request the request to retrieve from the Map. Is the key
+     * @param request the request to retrieve from the Map. Is the key. For purposes of this
+     *                project, request to pass is 1.
      * @return the client value retrieved from the Map
      */
     public static Client getClient(final int request) {
         return clientMap.get(request);
     }
 
+    /**
+     * Clear the map when application is finished
+     */
     public static void dispose() {
         clientMap.clear();
     }

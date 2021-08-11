@@ -1,7 +1,6 @@
-package com.allan.amca.user;
+package com.allan.amca.cucumber.user;
 
 public class UserTest {
-    UserFactory userFactory = new UserFactoryGenerator();
 
 
 //    @Given("com.allan.amca.Login.User opens the ATM application")

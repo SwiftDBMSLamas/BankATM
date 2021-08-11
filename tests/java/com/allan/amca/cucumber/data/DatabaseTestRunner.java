@@ -1,4 +1,4 @@
-package com.allan.amca.data;
+package com.allan.amca.cucumber.data;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;

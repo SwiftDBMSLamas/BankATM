@@ -1,5 +1,6 @@
-package com.allan.amca.data;
+package com.allan.amca.cucumber.data;
 
+import com.allan.amca.user.UserDaoImpl;
 import com.allan.amca.user.Client;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -21,7 +22,7 @@ public class DatabaseTest {
                                                                             final String lastName,
                                                                             final String password) {
 //        newUser = UserFactoryGenerator.CreateUser(firstName, lastName, password);
-        newUser = new Client(firstName, lastName, password);
+//        newUser = new Client(firstName, lastName, password);
     }
     @Then("A newly created user is created in the database")
     public void a_newly_created_user_is_created_in_the_database() {
@@ -63,7 +64,7 @@ public class DatabaseTest {
 //        updatedUser = db.getClient(idToUpdate);
         updatedUser.setFirstName(firstName);
         updatedUser.setLastName(lastName);
-        updatedUser.setPassword(password);
+//        updatedUser.setPin(password);
     }
     @Then("The database should update my record")
     public void the_database_should_update_my_record() {

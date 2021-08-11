@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Transaction super class
+ * Transaction base class
  * @author allanaranzaso
  */
 public abstract class Transaction
@@ -113,6 +113,9 @@ public abstract class Transaction
         final int CLIENT_ID_PARAM   = 2;
         final int NO_RECORDS        = 0;
         final String UPDATE_QUERY   = "UPDATE account SET balance = ? WHERE clientID = ?;";
+        final String INSERT_QUERY   = "INSERT INTO Transactions " +
+                "(transaction_type, transaction_date, transaction_amount, client_id) " +
+                "VALUES(?, ?, ?, ?)";
         final double INVALID_AMT    = 0.0;
         final String EX_MSG         = "You have entered an invalid amount";
         final Double currentBalance;
@@ -138,6 +141,13 @@ public abstract class Transaction
                 recordsUpdated = transaction.executeUpdate();
                 if (recordsUpdated > NO_RECORDS) {
                     transactionSuccess = true;
+                    try (PreparedStatement write = connection.prepareStatement(INSERT_QUERY)) {
+                        write.setString(1, this.getTransactionType());
+                        write.setString(2, this.getTransactionDate());
+                        write.setDouble(3, this.getTransactionAmount());
+                        write.setLong(4, clientID);
+                        write.executeUpdate();
+                    }
                 }
             }
             connection.commit();

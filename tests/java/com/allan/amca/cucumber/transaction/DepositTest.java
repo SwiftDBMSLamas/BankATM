@@ -1,24 +1,21 @@
-package com.allan.amca.transaction;
+package com.allan.amca.cucumber.transaction;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class WithdrawalTest {
+public class DepositTest {
 
-    @Given("I want to withdraw money")
+    @Given("I want to deposit money")
     public void i_want_to_deposit_money() {
         System.out.println("Not implemented yet");
     }
-    @When("I enter my client card as {long} and the amount to withdraw as {double}")
+    @When("I enter my client card as {long} and the amount to deposit as {double}")
     public void i_enter_my_client_card_as_and_the_amount_to_deposit_as(final Long clientID,
                                                                        final Double amtToDeposit) {
-//        Transactional t = new Withdrawal(, clientID);
-//        t.performTransaction(TransactionType.WITHDRAWAL, clientID, amtToDeposit);
     }
-    @Then("Withdraw should be successful")
+    @Then("Deposit should be successful")
     public void deposit_should_be_successful() {
-        System.out.println("Withdraw done");
+        System.out.println("Deposit done");
     }
-
 }

@@ -10,20 +10,22 @@ public class Client extends User {
 
     private long clientCardID;
     private static HashMap<Integer, Client> clientMap;
+    private static final int SEND_REQUEST;
 
     static
     {
-        clientMap = new HashMap<>();
+        SEND_REQUEST    = 1;
+        clientMap       = new HashMap<>();
     }
 
     /**
      * Constructor that will register a new Client object and add them to the database
      * @param firstName First name of the client
      * @param lastName Last name of the client
-     * @param password Password that the client has chosen
+     * @param pin Pin that the client has chosen
      */
-    public Client(final String firstName, final String lastName, final String password) {
-        super(firstName, lastName, password);
+    public Client(final String firstName, final String lastName, final int pin) {
+        super(firstName, lastName, pin);
     }
 
     /**
@@ -51,6 +53,9 @@ public class Client extends User {
     public static Client sendClient(final int request, final Client clientObj) {
         if (clientMap == null) {
             clientMap = new HashMap<>();
+        }
+        if (request != SEND_REQUEST || clientObj == null) {
+            throw new IllegalArgumentException("Request or Client argument is invalid.");
         }
         clientMap.put(request, clientObj);
         return clientObj;

@@ -1,14 +1,15 @@
 package com.allan.amca.data;
 
 import com.allan.amca.account.AccountDaoImpl;
+import com.allan.amca.user.UserDaoImpl;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.transaction.TransactionDaoImpl;
 
 public class DaoFactoryGenerator implements DaoFactory {
 
     @Override
-    public final DaoAbstract createDao(final DaoType type) {
-        final DaoAbstract factory;
+    public final Dao createDao(final DaoType type) {
+        final Dao factory;
 
         switch (type) {
             case USER -> factory = new UserDaoImpl();

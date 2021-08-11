@@ -1,4 +1,4 @@
-package com.allan.amca.data;
+package com.allan.amca.user;
 
 public interface UserDaoDeprecate {
 

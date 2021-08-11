@@ -1,9 +1,8 @@
 package com.allan.amca.gui;
 
-import com.allan.amca.data.DaoAbstract;
+import com.allan.amca.data.Dao;
 import com.allan.amca.data.DaoFactory;
 import com.allan.amca.data.DaoFactoryGenerator;
-import com.allan.amca.data.UserDaoImpl;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.enums.TransactionType;
 import com.allan.amca.login.Login;
@@ -102,11 +101,13 @@ public class Screen extends JFrame {
             final boolean authenticated;
             final String clientCardStr = clientCardInputField.getText();
             final long clientCard = Long.parseLong(clientCardStr);
-            final String password = String.valueOf(clientPINPasswordField.getPassword());
+            final String pinStr = String.valueOf(clientPINPasswordField.getPassword());
+            final int pin = Integer.parseInt(pinStr);
 
-            authenticated = login.login(clientCard, password);
+            authenticated = login.login(clientCard, pin);
             if (authenticated) {
-                client = UserDaoImpl.newInstance().retrieve(clientCard);
+                Dao account = dao.createDao(DaoType.USER);
+                client = (Client) account.retrieve(clientCard);
 
                 Client.sendClient(SEND_CLIENT_REQUEST, client);
                 SelectionMenu sm = new SelectionMenu();
@@ -180,6 +181,7 @@ public class Screen extends JFrame {
             c.gridwidth = 1;
             c.gridx = 0;
             c.gridy = 0;
+            c.insets = new Insets(0,0,0,0);
             selectionPanel.add(transactionMenuWelcomeLabel, c);
 
             // Balance btn
@@ -238,6 +240,7 @@ public class Screen extends JFrame {
             });
 
             exitTransactionButton.addActionListener( event -> {
+                JOptionPane.showMessageDialog(frame, "Are you sure you want to log out?", "Log out", JOptionPane.WARNING_MESSAGE);
                 card.show(cardPane, "Login");
                 Client.dispose();
             });
@@ -289,6 +292,7 @@ public class Screen extends JFrame {
                 final Transaction depositTransaction = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
 
                 depositTransaction.performTransaction(client.getClientID(), depositAmt);
+                // write transaction to database
             });
         }
 
@@ -416,7 +420,7 @@ public class Screen extends JFrame {
             printBalanceBtn.addActionListener( event -> {
 
                 System.err.println("Client's current balance: ");
-                DaoAbstract accountDao = dao.createDao(DaoType.ACCOUNT);
+                Dao accountDao = dao.createDao(DaoType.ACCOUNT);
                 Double balance = (Double) accountDao.retrieve(client.getClientID());
                 System.out.println(balance);
             });

@@ -1,13 +1,12 @@
-package com.allan.amca.data;
+package com.allan.amca.user;
 
-import com.allan.amca.user.Client;
-import com.allan.amca.user.UserFactory;
-import com.allan.amca.user.UserFactoryGenerator;
+import com.allan.amca.data.DaoAbstract;
+import com.allan.amca.data.Resources;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
-public class UserDaoImpl extends DaoAbstract<Client, Long>  {
+public class UserDaoImpl extends DaoAbstract<Client, Long> {
 //    Resources
     private static final String DB_URI          = Resources.getDBUri();
     private static final String DB_USER         = Resources.getDBUsername();
@@ -24,27 +23,23 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
     private static final String COLUMN_CLIENT_ID            = "client_id";
     private static final String COLUMN_CLIENT_FIRSTNAME     = "first_name";
     private static final String COLUMN_CLIENT_LASTNAME      = "last_name";
-    private static final String COLUMN_CLIENT_PASSWORD      = "password";
+    private static final String COLUMN_CLIENT_PIN           = "pin";
 
 //    PrepareStatement parameters for Client object
     private static final int NO_RECORDS                     = 0;
     private static final int FIRST_NAME_PARAM               = 1;
     private static final int LAST_NAME_PARAM                = 2;
-    private static final int PASS_PARAM                     = 3;
+    private static final int PIN_PARAM                      = 3;
     private static final int CLIENT_ID_PARAM                = 4;
 
 //    DML commands
     private static final String ADD_NEW_USER   = "INSERT INTO " + TABLE_CLIENT;
-
-    private static final UserDaoImpl instance     = new UserDaoImpl();
-
+    private static final UserDaoImpl instance = new UserDaoImpl();
     public UserDaoImpl(){}
 
-// Singleton access... reconsider implementation of this
     public static UserDaoImpl newInstance() {
         return instance;
     }
-
     /**
      *  Creates database on start if it doesn't already exist
       */
@@ -55,7 +50,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
                 + COLUMN_CLIENT_ID + " INT NOT NULL,"
                 + COLUMN_CLIENT_FIRSTNAME + " VARCHAR(30) NOT NULL,"
                 + COLUMN_CLIENT_LASTNAME + " VARCHAR(40) NOT NULL,"
-                + COLUMN_CLIENT_PASSWORD + " TEXT NOT NULL,"
+                + COLUMN_CLIENT_PIN + " TEXT NOT NULL,"
                 + "PRIMARY KEY (" + COLUMN_CLIENT_ID + ")" + ");";
 
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
@@ -84,7 +79,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
      */
     @Override
     protected boolean addRecord(@NotNull final Client user)  {
-        final String ADD_USER       = ADD_NEW_USER + " (first_name, last_name, password) " +
+        final String ADD_USER       = ADD_NEW_USER + " (first_name, last_name, pin) " +
                                         "VALUES (?, ?, ?);";
         boolean clientAdded         = false;
         final int recordsInserted;
@@ -94,7 +89,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
                 connection.setAutoCommit(false);
                 addClient.setString(FIRST_NAME_PARAM, user.getFirstName());
                 addClient.setString(LAST_NAME_PARAM, user.getLastName());
-                addClient.setString(PASS_PARAM, user.getPassword());
+                addClient.setInt(PIN_PARAM, user.getPIN());
 
                 recordsInserted = addClient.executeUpdate();
                 if (recordsInserted > NO_RECORDS) {
@@ -171,22 +166,20 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
         final int CLIENT_ID_COL     = 1;
         final int FIRST_NAME_COL    = 2;
         final int LAST_NAME_COL     = 3;
-        final int PASSWORD_COL      = 4;
+        final int PIN_COL           = 4;
 
         final long clientID;
         final String firstName;
         final String lastName;
-        final String pw;
+        final int    pin;
         final Client client;
-        final UserFactory generateUser;
 
         clientID = resultSet.getLong(CLIENT_ID_COL);
         firstName = resultSet.getString(FIRST_NAME_COL);
         lastName = resultSet.getString(LAST_NAME_COL);
-        pw = resultSet.getString(PASSWORD_COL);
+        pin = resultSet.getInt(PIN_COL);
 
-        generateUser = UserFactoryGenerator.createFactory();
-        client = generateUser.createUser(firstName, lastName, pw);
+        client = UserFactory.createUser(firstName, lastName, pin);
         client.setClientID(clientID);
 
         return client;
@@ -204,7 +197,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
         final String UPDATE_USER = "UPDATE " + TABLE_CLIENT + " " +
                                     "SET " + COLUMN_CLIENT_FIRSTNAME + " = ?, "
                                     + COLUMN_CLIENT_LASTNAME + " = ?, "
-                                    + COLUMN_CLIENT_PASSWORD + " = ? WHERE client_id = ?;";
+                                    + COLUMN_CLIENT_PIN + " = ? WHERE client_id = ?;";
         boolean clientIsUpdated = false;
 
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
@@ -213,7 +206,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long>  {
 
                 updateClient.setString(FIRST_NAME_PARAM, user.getFirstName());
                 updateClient.setString(LAST_NAME_PARAM, user.getLastName());
-                updateClient.setString(PASS_PARAM, user.getPassword());
+                updateClient.setInt(PIN_PARAM, user.getPIN());
                 updateClient.setLong(CLIENT_ID_PARAM, user.getClientID());
 
                 recordsUpdated = updateClient.executeUpdate();

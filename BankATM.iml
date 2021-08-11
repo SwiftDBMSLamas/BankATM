@@ -47,5 +47,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="io.cucumber.junit" level="project" />
+    <orderEntry type="library" name="hamcrest" level="project" />
   </component>
 </module>

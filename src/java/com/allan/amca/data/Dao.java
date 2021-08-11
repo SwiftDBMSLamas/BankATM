@@ -1,7 +1,7 @@
 package com.allan.amca.data;
 
 import java.sql.SQLException;
-
+// TODO: next iteration, create REST API to communicate between database and the program logic
 /**
  * Interface to override and for providing flexibility
  * @param <T> the type of object to create a Generic type for.

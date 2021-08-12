@@ -1,31 +1,29 @@
 package com.allan.amca.junit.transaction;
 
-import com.allan.amca.enums.TransactionType;
 import com.allan.amca.transaction.Transaction;
-import com.allan.amca.transaction.TransactionFactory;
-import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class TransactionTest {
 
-    @Test
-    void getTransactionDate() {
+    protected void getDate(final Transaction transaction,
+                           final String      expectedDate) {
+        assertThat(transaction.getTransactionDate(), equalTo(expectedDate));
     }
 
-    @Test
-    void getTransactionType() {
+    protected void getType(final Transaction transaction,
+                           final String      expectedType) {
+        assertThat(transaction.getTransactionType(), equalTo(expectedType));
     }
 
-    @Test
-    void getTransactionAmount() {
+    protected void getAmount(final Transaction transaction,
+                             final double      expectedAmount) {
+        assertThat(transaction.getTransactionAmount(), equalTo(expectedAmount));
     }
 
-    @Test
-    void getTransactionID() {
-    }
-
-    @Test
-    void performTransaction() {
-        Transaction transaction = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
-        transaction.performTransaction(4519011123012444L, 1000.00);
+    protected void getID(final Transaction transaction,
+                         final int         expectedTID) {
+        assertThat(transaction.getTransactionID(), equalTo(expectedTID));
     }
 }

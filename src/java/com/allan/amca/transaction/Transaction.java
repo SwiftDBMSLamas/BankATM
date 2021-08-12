@@ -1,9 +1,10 @@
 package com.allan.amca.transaction;
 
 import com.allan.amca.data.Dao;
-import com.allan.amca.data.DaoFactoryGenerator;
+import com.allan.amca.data.DaoFactory;
 import com.allan.amca.data.Resources;
 import com.allan.amca.enums.DaoType;
+import com.allan.amca.user.Client;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +19,7 @@ public abstract class Transaction
         extends TransactionFactory
         implements Transactional {
 
-    private final Dao accountDao            = DaoFactoryGenerator.createFactory().createDao(DaoType.ACCOUNT);
+    private final Dao<Client, Number> accountDao            = DaoFactory.createDao(DaoType.ACCOUNT);
     private static final String DB_URI      = Resources.getDBUri();
     private static final String DB_USER     = Resources.getDBUsername();
     private static final String DB_PASS     = Resources.getDBPassword();
@@ -124,7 +125,7 @@ public abstract class Transaction
         boolean transactionSuccess = false;
 
         transactionAmount = amount;
-        currentBalance = (Double) accountDao.retrieve(clientID);
+        currentBalance = accountDao.retrieve(clientID);
 
         if (amount <= INVALID_AMT) {
             throw new IllegalStateException(EX_MSG);

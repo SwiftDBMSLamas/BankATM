@@ -1,7 +1,7 @@
 package com.allan.amca.junit.account;
 
 import com.allan.amca.data.Dao;
-import com.allan.amca.data.DaoFactoryGenerator;
+import com.allan.amca.data.DaoFactory;
 import com.allan.amca.enums.DaoType;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ class AccountTest {
 
     protected void getBalance(final long clientID,
                               final double expectedBalance) {
-        Dao account = DaoFactoryGenerator.createFactory().createDao(DaoType.ACCOUNT);
+        Dao account = DaoFactory.createDao(DaoType.ACCOUNT);
         double balance = (double) account.retrieve(clientID);
         assertThat(balance, equalTo(expectedBalance));
     }

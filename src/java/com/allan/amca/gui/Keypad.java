@@ -10,9 +10,7 @@ public class Keypad extends JFrame{
     private JButton B1;
 
     public Keypad() {
-        frame = new JFrame();
-        panel = new JPanel();
-        createKeypad();
+
     }
 
     public void createKeypad() {
@@ -23,10 +21,6 @@ public class Keypad extends JFrame{
             final JButton buttons = new JButton(buttonNums.substring(i, i+ 1));
             panel.add(buttons);
         }
-        frame.add(panel);
-        frame.pack();
-        frame.setSize(300, 300);
-        frame.setVisible(true);
     }
 
     public static void main(String[] args) {

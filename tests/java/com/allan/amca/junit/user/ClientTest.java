@@ -1,7 +1,7 @@
 package com.allan.amca.junit.user;
 
 import com.allan.amca.data.Dao;
-import com.allan.amca.data.DaoFactoryGenerator;
+import com.allan.amca.data.DaoFactory;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.user.Client;
 import com.allan.amca.user.UserFactory;
@@ -14,7 +14,7 @@ class ClientTest extends PersonTest {
 
     @Test
     void getClientID() {
-        Dao clientDao = DaoFactoryGenerator.createFactory().createDao(DaoType.USER);
+        Dao clientDao = DaoFactory.createDao(DaoType.USER);
         Client client1 = (Client) clientDao.retrieve(4519011123012372L);
         Client client2 = (Client) clientDao.retrieve(4519011123012374L);
         Client client3 = (Client) clientDao.retrieve(4519011123012394L);

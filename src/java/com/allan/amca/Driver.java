@@ -7,7 +7,7 @@ import javax.swing.*;
 public class Driver {
 
     public static void main(final String[] args) {
-        SwingUtilities.invokeLater(() -> runUI());
+        SwingUtilities.invokeLater(Driver::runUI);
     }
 
     private static void runUI() {
@@ -15,6 +15,7 @@ public class Driver {
 
         screen.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         screen.frame.setSize(400, 280);
+        screen.frame.setLocationRelativeTo(null);
         screen.frame.setVisible(true);
     }
 }

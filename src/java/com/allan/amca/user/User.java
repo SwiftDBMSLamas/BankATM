@@ -3,7 +3,7 @@ public abstract class User implements Person {
 
     private String          firstName;
     private String          lastName;
-    private int             pin;
+    private String          pin;
 
     /**
      * Constructor to create a new user
@@ -11,7 +11,7 @@ public abstract class User implements Person {
      * @param lastName The user's last name. Cannot be null or empty.
      * @param pin The user's password. Cannot be null. Password length must be greater than 7 characters.
      */
-    protected User(final String firstName, final String lastName, final int pin) {
+    protected User(final String firstName, final String lastName, final String pin) {
         validateUser(firstName, lastName, pin);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,12 +22,12 @@ public abstract class User implements Person {
      * Validates the arguments passed through the constructor.
      * @param firstName the user's first name. Cannot be null or empty.
      * @param lastName the user's last name. Cannot be null or empty.
-     * @param password the user's password. Cannot be null. Password length must be greater than 7 characters.
+     * @param pin the user's pin. Cannot be null. Password length must be greater than 7 characters.
      * @throws IllegalArgumentException if user's information is not valid.
      */
     private static void validateUser(final String firstName,
                                      final String lastName,
-                                     final int    pin) {
+                                     final String pin) {
         final String FIRST_EMPTY = "First name cannot be empty";
         final String LAST_EMPTY  = "Last name cannot be empty";
         final String PW_EMPTY    = "PIN must be minimum 4 digits or more";
@@ -39,7 +39,7 @@ public abstract class User implements Person {
         if (lastName == null || lastName.isEmpty()) {
             throw new IllegalArgumentException(LAST_EMPTY);
         }
-        if (pin < PIN_LIMIT) {
+        if (pin.length() < PIN_LIMIT) {
             throw new IllegalArgumentException(PW_EMPTY);
         }
     }
@@ -64,7 +64,7 @@ public abstract class User implements Person {
      * Get user's PIN
      * @return user's PIN
      */
-    public int getPIN() {
+    public String getPIN() {
         return pin;
     }
 
@@ -88,7 +88,7 @@ public abstract class User implements Person {
      * Set user's password
      * @param pin - user's password to set
      */
-    public void setPin(final int pin) {
+    public void setPin(final String pin) {
         this.pin = pin;
     }
 

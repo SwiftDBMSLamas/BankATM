@@ -1,16 +1,17 @@
 package com.allan.amca.account;
 
 import com.allan.amca.data.DaoAbstract;
-import com.allan.amca.data.Resources;
+import com.allan.amca.data.DataResources;
 import com.allan.amca.user.Client;
 
+import java.math.BigDecimal;
 import java.sql.*;
 
 public class AccountDaoImpl extends DaoAbstract<Client, Long> {
-    private static final String DB_URI              = Resources.getDBUri();
-    private static final String DB_USER             = Resources.getDBUsername();
-    private static final String DB_PASSWORD         = Resources.getDBPassword();
-    private static final int NO_RECORDS             = 0;
+    private static final String DB_URI              = DataResources.getDBUri();
+    private static final String DB_USER             = DataResources.getDBUsername();
+    private static final String DB_PASSWORD         = DataResources.getDBPassword();
+    private static final int    NO_RECORDS          = 0;
 
     /**
      * Retrieve the client's balance from the database.
@@ -18,12 +19,12 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
      * @return the client's account balance
      */
     @Override
-    protected Double readRecord(final Long accountID) {
+    protected BigDecimal readRecord(final Long accountID) {
         final int ACCOUNT_ID_PARAM  = 1;
         final String QUERY          = "SELECT balance FROM account WHERE clientID = ?;";
         final int    BALANCE_COL    = 1;
         ResultSet rs;
-        double retrievedBalance = 0.0;
+        BigDecimal retrievedBalance = BigDecimal.valueOf(0.0);
 
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PASSWORD)) {
             try (PreparedStatement retrieveBal = connection.prepareStatement(QUERY)) {
@@ -32,7 +33,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
 
                 rs = retrieveBal.executeQuery();
                 while (rs.next()) {
-                    retrievedBalance = rs.getDouble(BALANCE_COL);
+                    retrievedBalance = BigDecimal.valueOf(rs.getDouble(BALANCE_COL));
                 }
             }
             connection.commit();
@@ -44,16 +45,17 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
 
     /**
      * Add client's account to the database. This is different from creating a client. This will "open" up
-     * an account for the client
+     * an account for the client. The client MUST exist in the client database, otherwise you will run into
+     * an SQL exception for failing foreign key constraints
      * @param toCreate the client object to add to the database.
      * @return true if the query executed successfully. Otherwise, false.
      */
     @Override
     protected boolean addRecord(Client toCreate) {
-        final String ADD_QUERY = "INSERT INTO account VALUES (?,?)";
+        final String ADD_QUERY = "INSERT INTO account (clientID, balance) VALUES (?,?)";
         final int CLIENT_ID_PARAM = 1;
         final int BALANCE_PARAM = 2;
-        final double OPENING_BALANCE = 0.0;
+        final BigDecimal OPENING_BALANCE = BigDecimal.valueOf(0.0);
         final int recordsInserted;
         boolean successfullyAdded = false;
 
@@ -61,8 +63,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
             try (PreparedStatement addAccount = connection.prepareStatement(ADD_QUERY)) {
                 connection.setAutoCommit(false);
                 addAccount.setLong(CLIENT_ID_PARAM, toCreate.getClientID());
-                addAccount.setDouble(BALANCE_PARAM, OPENING_BALANCE);
-
+                addAccount.setBigDecimal(BALANCE_PARAM, OPENING_BALANCE);
                 recordsInserted = addAccount.executeUpdate();
                 if (recordsInserted > NO_RECORDS) {
                     successfullyAdded = true;
@@ -114,7 +115,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
      */
     @Override
     protected boolean executeUpdate(Client client, Long balance) {
-        final double balanceToUpdate = balance.doubleValue();
+        final BigDecimal balanceToUpdate = BigDecimal.valueOf(balance.doubleValue());
         final long clientID = client.getClientID();
         final int BALANCE_PARAM = 1;
         final int CLIENT_ID_PARAM = 2;
@@ -125,7 +126,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PASSWORD)) {
             try (PreparedStatement updateQuery = connection.prepareStatement(UPDATE_QUERY)) {
                 connection.setAutoCommit(false);
-                updateQuery.setDouble(BALANCE_PARAM, balanceToUpdate);
+                updateQuery.setBigDecimal(BALANCE_PARAM, balanceToUpdate);
                 updateQuery.setLong(CLIENT_ID_PARAM, clientID);
 
                 recordsUpdated = updateQuery.executeUpdate();

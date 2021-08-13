@@ -1,7 +1,7 @@
 package com.allan.amca.transaction;
 
 import com.allan.amca.data.DaoAbstract;
-import com.allan.amca.data.Resources;
+import com.allan.amca.data.DataResources;
 import com.allan.amca.user.Client;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,9 +13,9 @@ import java.sql.*;
  * @version 1.0
  */
 public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
-    private static final String URI          = Resources.getDBUri();
-    private static final String DB_USER      = Resources.getDBUsername();
-    private static final String DB_PW        = Resources.getDBPassword();
+    private static final String URI          = DataResources.getDBUri();
+    private static final String DB_USER      = DataResources.getDBUsername();
+    private static final String DB_PW        = DataResources.getDBPassword();
     private static final int TRANSACTION_TYPE_PARAM;
     private static final int TRANSACTION_DATE_PARAM;
     private static final int TRANSACTION_AMOUNT_PARAM;
@@ -52,7 +52,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
                 connection.setAutoCommit(false);
                 addStmt.setString(TRANSACTION_TYPE_PARAM, transaction.getTransactionType());
                 addStmt.setString(TRANSACTION_DATE_PARAM, transaction.getTransactionDate());
-                addStmt.setDouble(TRANSACTION_AMOUNT_PARAM, transaction.getTransactionAmount());
+                addStmt.setBigDecimal(TRANSACTION_AMOUNT_PARAM, transaction.getTransactionAmount());
                 addStmt.setLong(TRANSACTION_CLIENT_ID_PARAM, client.getClientID());
 
                 numOfRecordsInserted = addStmt.executeUpdate();
@@ -121,7 +121,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
                     retrievedTransaction.setTransactionID(rs.getInt(TRANSACTION_ID_PARAM));
                     retrievedTransaction.setTransactionType(rs.getString(TRANSACTION_TYPE_PARAM));
                     retrievedTransaction.setTransactionDate(rs.getString(TRANSACTION_DATE_PARAM));
-                    retrievedTransaction.setTransactionAmount(rs.getDouble(TRANSACTION_AMT_PARAM));
+                    retrievedTransaction.setTransactionAmount(rs.getBigDecimal(TRANSACTION_AMT_PARAM));
                 }
             }
         } catch (SQLException ex) {
@@ -180,7 +180,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
 
                 updateStmt.setString(TRANSACTION_AMOUNT_PARAM, transaction.getTransactionType());
                 updateStmt.setString(TRANSACTION_DATE_PARAM, transaction.getTransactionDate());
-                updateStmt.setDouble(TRANSACTION_AMOUNT_PARAM, transaction.getTransactionAmount());
+                updateStmt.setBigDecimal(TRANSACTION_AMOUNT_PARAM, transaction.getTransactionAmount());
                 updateStmt.setInt(TRANSACTION_CLIENT_ID_PARAM, transactionID);
 
                 recordsUpdated = updateStmt.executeUpdate();

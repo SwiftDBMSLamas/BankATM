@@ -24,7 +24,7 @@ public class Client extends User {
      * @param lastName Last name of the client
      * @param pin Pin that the client has chosen
      */
-    public Client(final String firstName, final String lastName, final int pin) {
+    public Client(final String firstName, final String lastName, final String pin) {
         super(firstName, lastName, pin);
     }
 

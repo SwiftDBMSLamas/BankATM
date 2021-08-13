@@ -1,7 +1,6 @@
 package com.allan.amca.junit.data;
 
 import com.allan.amca.data.Dao;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.sql.SQLException;
@@ -33,7 +32,7 @@ public abstract class DaoAbstractTest {
 
     protected <T> void retrieve(final Dao<T, Number>    dao,
                                 final Number            number,
-                                final T                 expectedResult) throws SQLException {
+                                final T                 expectedResult) {
         assertThat(dao.retrieve(number), equalTo(expectedResult));
     }
 

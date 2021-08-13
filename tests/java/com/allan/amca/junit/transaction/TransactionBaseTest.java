@@ -6,9 +6,10 @@ import com.allan.amca.enums.DaoType;
 import com.allan.amca.enums.TransactionType;
 import com.allan.amca.transaction.Transaction;
 import com.allan.amca.transaction.TransactionFactory;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import java.math.BigDecimal;
 
 class TransactionBaseTest extends TransactionTest {
 
@@ -50,11 +51,11 @@ class TransactionBaseTest extends TransactionTest {
         Transaction withdraw2 = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
         Transaction deposit2 = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
 
-        withdraw.performTransaction(4519011123012444L, 100.0);
-        deposit.performTransaction(4519011123012444L, 100.0);
+        withdraw.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0));
+        deposit.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0));
 
-        deposit2.performTransaction(4519011123012372L, 2143.0);
-        withdraw2.performTransaction(4519011123012372L, 2143.0);
+        deposit2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0));
+        withdraw2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0));
 
         getAmount(withdraw, withdraw.getTransactionAmount());
         getAmount(deposit, deposit.getTransactionAmount());
@@ -77,10 +78,10 @@ class TransactionBaseTest extends TransactionTest {
         Transaction withdraw2 = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
         Transaction deposit2 = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
 
-        assertTrue(withdraw.performTransaction(4519011123012444L, 100.0));
-        assertTrue(deposit.performTransaction(4519011123012444L, 100.0));
+        Assertions.assertTrue(withdraw.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0)));
+        Assertions.assertTrue(deposit.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0)));
 
-        assertTrue(deposit2.performTransaction(4519011123012372L, 2143.0));
-        assertTrue(withdraw2.performTransaction(4519011123012372L, 2143.0));
+        Assertions.assertTrue(deposit2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0)));
+        Assertions.assertTrue(withdraw2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0)));
     }
 }

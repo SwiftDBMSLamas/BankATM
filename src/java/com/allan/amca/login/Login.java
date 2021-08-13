@@ -1,6 +1,6 @@
 package com.allan.amca.login;
 
-import com.allan.amca.data.Resources;
+import com.allan.amca.data.DataResources;
 
 import java.sql.*;
 
@@ -10,10 +10,10 @@ public class Login extends LoginViewModel {
 
     private Login() {}
 // Can refactor this into a result class. call the method
-    public boolean login(final Long clientID, final int pin) {
-        final String URI            = Resources.getDBUri();
-        final String DB_USER        = Resources.getDBUsername();
-        final String DB_PW          = Resources.getDBPassword();
+    public boolean login(final Long clientID, final String pin) {
+        final String URI            = DataResources.getDBUri();
+        final String DB_USER        = DataResources.getDBUsername();
+        final String DB_PW          = DataResources.getDBPassword();
         final String LOGIN_QUERY    = "SELECT client_id, pin FROM client WHERE client_id = ? AND pin = ?;";
         final ResultSet result;
         boolean resultValid = false;
@@ -21,7 +21,7 @@ public class Login extends LoginViewModel {
         try (Connection connection = DriverManager.getConnection(URI, DB_USER, DB_PW)) {
             try (PreparedStatement validateLogin = connection.prepareStatement(LOGIN_QUERY)) {
                 validateLogin.setLong(1, clientID);
-                validateLogin.setInt(2, pin);
+                validateLogin.setString(2, pin);
                 result = validateLogin.executeQuery();
                 if (result.next()) {
                     resultValid = true;

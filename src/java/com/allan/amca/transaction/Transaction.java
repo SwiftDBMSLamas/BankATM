@@ -2,10 +2,11 @@ package com.allan.amca.transaction;
 
 import com.allan.amca.data.Dao;
 import com.allan.amca.data.DaoFactory;
-import com.allan.amca.data.Resources;
+import com.allan.amca.data.DataResources;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.user.Client;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,13 +21,14 @@ public abstract class Transaction
         implements Transactional {
 
     private final Dao<Client, Number> accountDao            = DaoFactory.createDao(DaoType.ACCOUNT);
-    private static final String DB_URI      = Resources.getDBUri();
-    private static final String DB_USER     = Resources.getDBUsername();
-    private static final String DB_PASS     = Resources.getDBPassword();
+    private static final String DB_URI                      = DataResources.getDBUri();
+    private static final String DB_USER                     = DataResources.getDBUsername();
+    private static final String DB_PASS                     = DataResources.getDBPassword();
+    private static final int    NEG_VALUE                   = 0;
     private String              transactionType;
     private int                 transactionID;
     private String              transactionDate;
-    private double              transactionAmount;
+    private BigDecimal          transactionAmount;
 
     /**
      * Transaction constructor that takes one parameter to set the transaction date.
@@ -49,20 +51,26 @@ public abstract class Transaction
      */
     public String getTransactionType() {
         final String classType = this.getClass().toString().toLowerCase();
-        String prettyType = null;
+        return formatTransactionType(classType);
+    }
 
-        if (classType.contains("withdrawal")) {
-            prettyType = "withdrawal";
-        } else if (classType.contains("deposit")) {
-            prettyType = "deposit";
+    private String formatTransactionType(final String toFormat) {
+        final String formatType;
+
+        if (toFormat.contains("withdrawal")) {
+            formatType = "withdrawal";
+        } else if (toFormat.contains("deposit")) {
+            formatType = "deposit";
+        } else {
+            throw new IllegalArgumentException("Transaction type is invalid: " + toFormat);
         }
-        return prettyType;
+        return formatType;
     }
 
     /**
      * @return the transaction dollar amount
      */
-    public double getTransactionAmount() {
+    public BigDecimal getTransactionAmount() {
         return transactionAmount;
     }
 
@@ -76,7 +84,7 @@ public abstract class Transaction
     /**
      * @param transactionAmount the amount to set
      */
-    public void setTransactionAmount(double transactionAmount) {
+    public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 
@@ -84,6 +92,9 @@ public abstract class Transaction
      * @param date the date of the transaction that took place to set
      */
     public void setTransactionDate(final String date) {
+        if (date.isBlank()) {
+            throw new IllegalArgumentException("Transaction date is invalid: " + date);
+        }
         this.transactionDate = date;
     }
 
@@ -91,6 +102,9 @@ public abstract class Transaction
      * @param type the type of transaction to set
      */
     public void setTransactionType(final String type) {
+        if (type.isBlank()) {
+            throw new IllegalArgumentException("Transaction type is invalid: " + type);
+        }
         this.transactionType = type;
     }
 
@@ -98,6 +112,9 @@ public abstract class Transaction
      * @param id the transaction ID to set
      */
     public void setTransactionID(final int id) {
+        if (id < NEG_VALUE) {
+            throw new IllegalArgumentException("Transaction ID is invalid: " + id);
+        }
         this.transactionID = id;
     }
 
@@ -109,7 +126,7 @@ public abstract class Transaction
      */
     @Override
     public final boolean performTransaction(final long clientID,
-                                            final Double amount){
+                                            final BigDecimal amount){
         final int BALANCE_PARAM     = 1;
         final int CLIENT_ID_PARAM   = 2;
         final int NO_RECORDS        = 0;
@@ -117,18 +134,18 @@ public abstract class Transaction
         final String INSERT_QUERY   = "INSERT INTO Transactions " +
                 "(transaction_type, transaction_date, transaction_amount, client_id) " +
                 "VALUES(?, ?, ?, ?)";
-        final double INVALID_AMT    = 0.0;
+        final BigDecimal INVALID_AMT    = BigDecimal.valueOf(0.0);
         final String EX_MSG         = "You have entered an invalid amount";
-        final Double currentBalance;
-        final double newBalance;
+        final BigDecimal currentBalance;
+        final BigDecimal newBalance;
         final int recordsUpdated;
         boolean transactionSuccess = false;
 
         transactionAmount = amount;
         currentBalance = accountDao.retrieve(clientID);
 
-        if (amount <= INVALID_AMT) {
-            throw new IllegalStateException(EX_MSG);
+        if (amount.compareTo(INVALID_AMT) < 0) {
+            throw new IllegalArgumentException(EX_MSG);
         }
 
         newBalance = calculate(currentBalance, transactionAmount);
@@ -136,7 +153,7 @@ public abstract class Transaction
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PASS)) {
             try (PreparedStatement transaction = connection.prepareStatement(UPDATE_QUERY)) {
                 connection.setAutoCommit(false);
-                transaction.setDouble(BALANCE_PARAM, newBalance);
+                transaction.setBigDecimal(BALANCE_PARAM, newBalance);
                 transaction.setLong(CLIENT_ID_PARAM, clientID);
 
                 recordsUpdated = transaction.executeUpdate();
@@ -145,7 +162,7 @@ public abstract class Transaction
                     try (PreparedStatement write = connection.prepareStatement(INSERT_QUERY)) {
                         write.setString(1, this.getTransactionType());
                         write.setString(2, this.getTransactionDate());
-                        write.setDouble(3, this.getTransactionAmount());
+                        write.setBigDecimal(3, this.getTransactionAmount());
                         write.setLong(4, clientID);
                         write.executeUpdate();
                     }
@@ -164,5 +181,5 @@ public abstract class Transaction
      * @param amount the amount to calculate with account balance.
      * @return the sum after the calculation has been performed.
      */
-    protected abstract double calculate(double currentBalance, double amount);
+    protected abstract BigDecimal calculate(BigDecimal currentBalance, BigDecimal amount);
 }

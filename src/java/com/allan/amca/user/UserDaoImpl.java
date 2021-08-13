@@ -1,16 +1,16 @@
 package com.allan.amca.user;
 
 import com.allan.amca.data.DaoAbstract;
-import com.allan.amca.data.Resources;
+import com.allan.amca.data.DataResources;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
 public class UserDaoImpl extends DaoAbstract<Client, Long> {
 //    Resources
-    private static final String DB_URI          = Resources.getDBUri();
-    private static final String DB_USER         = Resources.getDBUsername();
-    private static final String DB_PW           = Resources.getDBPassword();
+    private static final String DB_URI          = DataResources.getDBUri();
+    private static final String DB_USER         = DataResources.getDBUsername();
+    private static final String DB_PW           = DataResources.getDBPassword();
 
     /**
      * Table name
@@ -89,7 +89,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
                 connection.setAutoCommit(false);
                 addClient.setString(FIRST_NAME_PARAM, user.getFirstName());
                 addClient.setString(LAST_NAME_PARAM, user.getLastName());
-                addClient.setInt(PIN_PARAM, user.getPIN());
+                addClient.setString(PIN_PARAM, user.getPIN());
 
                 recordsInserted = addClient.executeUpdate();
                 if (recordsInserted > NO_RECORDS) {
@@ -110,8 +110,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
     */
     @Override
     protected Client readRecord(final Long toRetrieve) {
-        long clientID = toRetrieve.longValue();
-        return getClientFromDatabase(clientID);
+        return getClientFromDatabase(toRetrieve);
     }
 
     /**
@@ -139,10 +138,11 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
     private Client getClientFromDatabase(final long clientID) {
         final ResultSet resultSet;
         final String SELECT_CLIENT_QUERY = "SELECT * FROM client WHERE client_id = ?";
+        final int CLIENT_ID_PARAM        = 1;
 
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
             try (PreparedStatement getClient = connection.prepareStatement(SELECT_CLIENT_QUERY)) {
-                getClient.setLong(1, clientID);
+                getClient.setLong(CLIENT_ID_PARAM, clientID);
                 resultSet = getClient.executeQuery();
                 if (resultSet.next()) {
                     return getClient(resultSet);
@@ -171,13 +171,13 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
         final long clientID;
         final String firstName;
         final String lastName;
-        final int    pin;
+        final String pin;
         final Client client;
 
-        clientID = resultSet.getLong(CLIENT_ID_COL);
-        firstName = resultSet.getString(FIRST_NAME_COL);
-        lastName = resultSet.getString(LAST_NAME_COL);
-        pin = resultSet.getInt(PIN_COL);
+        clientID    = resultSet.getLong(CLIENT_ID_COL);
+        firstName   = resultSet.getString(FIRST_NAME_COL);
+        lastName    = resultSet.getString(LAST_NAME_COL);
+        pin         = resultSet.getString(PIN_COL);
 
         client = UserFactory.createUser(firstName, lastName, pin);
         client.setClientID(clientID);
@@ -206,7 +206,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
 
                 updateClient.setString(FIRST_NAME_PARAM, user.getFirstName());
                 updateClient.setString(LAST_NAME_PARAM, user.getLastName());
-                updateClient.setInt(PIN_PARAM, user.getPIN());
+                updateClient.setString(PIN_PARAM, user.getPIN());
                 updateClient.setLong(CLIENT_ID_PARAM, user.getClientID());
 
                 recordsUpdated = updateClient.executeUpdate();
@@ -230,6 +230,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
     @Override
     protected boolean deleteRecord(@NotNull final Client clientID) {
         final String DELETE_USER = "DELETE FROM client WHERE client_id = ?;";
+        final int CLIENT_ID_PARAM = 1;
         final int recordsDeleted;
         boolean clientDeleted    = false;
 
@@ -237,12 +238,12 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
             try (PreparedStatement deleteClient = connection.prepareStatement(DELETE_USER)) {
                 connection.setAutoCommit(false);
 
-                deleteClient.setLong(1, clientID.getClientID());
+                deleteClient.setLong(CLIENT_ID_PARAM, clientID.getClientID());
                 recordsDeleted = deleteClient.executeUpdate();
 
                 if (recordsDeleted > NO_RECORDS) {
                     clientDeleted = true;
-                    System.out.printf("Client with ID: %d successfully deleted \n", clientID);
+                    System.out.printf("Client with ID: %s successfully deleted \n", clientID);
                 }
             }
             connection.commit();

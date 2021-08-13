@@ -14,9 +14,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.math.BigDecimal;
 
 public class Screen extends JFrame {
-
+//TODO: add register button and method.. creates an account and adds to client and account databases
     public JFrame                   frame;
     private JPanel                  panel, cardPane;
     private static JTextField       clientCardInputField;
@@ -31,8 +32,8 @@ public class Screen extends JFrame {
     private static final int        SEND_CLIENT_REQUEST = 1;
     private CardLayout              cardLayout;
     private GridBagConstraints      constraints;
-    JPanel keyPanel = new JPanel(new GridLayout(4,3));
-    JButton numPad;
+    private JPanel keyPanel = new JPanel(new GridLayout(4,3));
+    private JButton numPad;
     private ScreenResources resource = new ScreenResources();
     {
         resource.getValues();
@@ -142,9 +143,8 @@ public class Screen extends JFrame {
             final String clientCardStr = clientCardInputField.getText();
             final long clientCard = Long.parseLong(clientCardStr);
             final String pinStr = String.valueOf(clientPINPasswordField.getPassword());
-            final int pin = Integer.parseInt(pinStr);
 
-            authenticated = login.login(clientCard, pin);
+            authenticated = login.login(clientCard, pinStr);
             if (authenticated) {
                 Dao<Client, Long> account = DaoFactory.createDao(DaoType.USER);
                 client = account.retrieve(clientCard);
@@ -340,7 +340,7 @@ public class Screen extends JFrame {
             depositBtn.addActionListener( event -> {
 
                 final boolean[] transactionSuccess = new boolean[1];
-                final double depositAmt = Double.parseDouble(depositTxtField.getText());
+                final BigDecimal depositAmt = BigDecimal.valueOf( Double.parseDouble( depositTxtField.getText() ) );
                 final Transaction depositTransaction = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
                 final JDialog dialog = new JDialog(frame, resource.DEPOSIT_DIALOG_TITLE(), true);
                 final JOptionPane confirmPane = new JOptionPane(String.format(resource.DEPOSIT_DIALOG_TEXT(), depositAmt), JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_NO_OPTION);
@@ -435,7 +435,7 @@ public class Screen extends JFrame {
             withdrawBtn.addActionListener( event -> {
                 // withdraw method
                 final boolean[] transactionSuccess = new boolean[1];
-                final double withdrawalAmt = Double.parseDouble(withdrawTxtField.getText());
+                final BigDecimal withdrawalAmt = BigDecimal.valueOf( Double.parseDouble(withdrawTxtField.getText() ) );
                 final Transaction withdrawalTransaction = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
                 final JDialog dialog = new JDialog(frame, resource.WITHDRAW_DIALOG_TITLE(), true);
                 final JOptionPane confirmPane = new JOptionPane(String.format(resource.WITHDRAW_DIALOG_TXT(), withdrawalAmt), JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_NO_OPTION);
@@ -541,7 +541,7 @@ public class Screen extends JFrame {
                 // show dialog with current balance
                 System.err.println("Client's current balance: ");
                 Dao<Client, Long> accountDao = DaoFactory.createDao(DaoType.ACCOUNT);
-                Double balance = accountDao.retrieve(client.getClientID());
+                BigDecimal balance = accountDao.retrieve(client.getClientID());
                 System.out.println(balance);
             });
             printTransactionsBtn.addActionListener( event -> {

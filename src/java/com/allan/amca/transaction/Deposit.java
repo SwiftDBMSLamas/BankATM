@@ -1,5 +1,7 @@
 package com.allan.amca.transaction;
 
+import java.math.BigDecimal;
+
 /**
  * Deposit subclass
  * @author allanaranzaso
@@ -21,7 +23,7 @@ public class Deposit extends Transaction {
      * @return the amount of money left in the account
      */
     @Override
-    protected double calculate(final double currentBalance, final double amount) {
-        return currentBalance + amount;
+    protected BigDecimal calculate(final BigDecimal currentBalance, final BigDecimal amount) {
+        return currentBalance.add(amount);
     }
 }

@@ -3,7 +3,7 @@ package com.allan.amca.data;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public final class Resources {
+public final class DataResources {
 
     private static final String URI;
     private static final String DB_USER;
@@ -17,7 +17,7 @@ public final class Resources {
         PASSWORD = bundle.getString("db.pw");
     }
 
-    private Resources(){}
+    private DataResources(){}
 
     public static String getDBUsername() {
         return DB_USER;

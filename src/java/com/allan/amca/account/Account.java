@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 public class Account extends AccountDaoImpl {
 
     private BigDecimal accountBalance;
+    private static final double INVALID_AMT = 0;
+    private static final double ZERO = 0;
 
     /**
      * Get the account's current balance
@@ -31,16 +33,10 @@ public class Account extends AccountDaoImpl {
      * @throws IllegalArgumentException if value is negative
      */
     private static void validateBalance(final BigDecimal balance) {
-        final BigDecimal zero = new BigDecimal(0);
-        int test = balance.compareTo(zero);
-        System.err.println(test);
-        if (balance.compareTo(zero) < 0) {
+        final BigDecimal zero = BigDecimal.valueOf(ZERO);
+
+        if (balance.compareTo(zero) < INVALID_AMT) {
             throw new IllegalArgumentException("Balance cannot go into overdraft");
         }
-    }
-
-    public static void main(String[] args) {
-        BigDecimal test = new BigDecimal(-2);
-        validateBalance(test);
     }
 }

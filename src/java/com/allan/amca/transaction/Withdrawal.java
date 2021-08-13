@@ -1,5 +1,7 @@
 package com.allan.amca.transaction;
 
+import java.math.BigDecimal;
+
 /**
  * Withdrawal subclass
  * @author allanaranzaso
@@ -22,11 +24,11 @@ public class Withdrawal extends Transaction {
      * @return the amount of money left in the account
      */
     @Override
-    protected double calculate(double currentBalance, double amount) {
-        if (currentBalance < amount) {
+    protected BigDecimal calculate(BigDecimal currentBalance, BigDecimal amount) {
+        if (currentBalance.compareTo(amount) < 0) {
             throw new IllegalStateException("You do not have enough funds to withdraw the entered amount");
         }
-        return currentBalance - amount;
+        return currentBalance.subtract(amount);
     }
 
 }

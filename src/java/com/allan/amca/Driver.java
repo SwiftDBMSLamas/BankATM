@@ -1,8 +1,7 @@
 package com.allan.amca;
 
-import com.allan.amca.enums.ScreenType;
+import com.allan.amca.gui.LoginGUI;
 import com.allan.amca.gui.Screen;
-import com.allan.amca.gui.ScreenFactory;
 
 import javax.swing.*;
 
@@ -14,7 +13,7 @@ public class Driver {
     }
 
     private static void runUI() {
-        final Screen screen = ScreenFactory.createScreen(ScreenType.LOGIN);
+        final Screen screen = new LoginGUI();
         screen.createUI();
 
         screen.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

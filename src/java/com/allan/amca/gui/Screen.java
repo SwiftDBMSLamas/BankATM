@@ -3,8 +3,11 @@ package com.allan.amca.gui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Screen base class
+ * @author allanaranzaso
+ */
 public abstract class Screen extends JFrame implements Frameable {
-//TODO: create abstract class and use template method to allow subclasses to override the steps only
 
     public JFrame                       frame;
     private JPanel                      cardPane;
@@ -15,10 +18,10 @@ public abstract class Screen extends JFrame implements Frameable {
     public static final int             GET_CLIENT_REQUEST = 1;
     private CardLayout                  cardLayout;
     protected final ScreenResources     resource = new ScreenResources();
-    //initializer to grab the values and loads the properties file. Loads once
+    //initializer to grab the values and loads the properties file.
     {
         resource.getValues();
-        frame       = new JFrame("ATM - LOGIN");
+        frame       = new JFrame("ATM - Login");
         cardPane    = new JPanel();
         cardLayout  = new CardLayout();
         addMenuBar();
@@ -26,13 +29,22 @@ public abstract class Screen extends JFrame implements Frameable {
 
     public Screen() {
     }
-    // all screens will need to call createUI
+
+    /**
+     * Create the UI for the appropriate screen.
+     * Interface methods initComponents() and addListeners() will create the appropriate components
+     * and listeners based on the subclass.
+     * Abstract method updateUI() will be overridden in each subclass to determine the type of UI to build
+     */
     public final void createUI() {
         initComponents();
         updateUI();
         addListeners();
     }
 
+    /**
+     * Updates the application's UI with the appropriate screen depending on where the user is
+     */
     protected abstract void updateUI();
 
     public JPanel getCardPane() {
@@ -43,10 +55,6 @@ public abstract class Screen extends JFrame implements Frameable {
         return cardLayout;
     }
 
-
-
-
-
     private void addMenuBar() {
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
@@ -56,18 +64,6 @@ public abstract class Screen extends JFrame implements Frameable {
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

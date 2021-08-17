@@ -9,25 +9,26 @@ import java.util.HashMap;
 public class ScreenFactory {
 
     private static final HashMap<ScreenType, Screen> screenMap;
+    private static final Screen     screen;
+    private static final JPanel     cardPane;
+    private static final CardLayout cardLayout;
 
     static {
+        screen = new LoginGUI();
+        cardPane = screen.getCardPane();
+        cardLayout = screen.getCardLayout();
+
         screenMap = new HashMap<>();
+        screenMap.put(ScreenType.LOGIN, new LoginGUI());
+        screenMap.put(ScreenType.REGISTER, new RegisterScreen(cardLayout, cardPane));
+        screenMap.put(ScreenType.SELECTION_MENU, new MenuScreen(cardLayout, cardPane));
+        screenMap.put(ScreenType.DEPOSIT, new DepositGUI(cardLayout, cardPane));
+        screenMap.put(ScreenType.WITHDRAWAL, new WithdrawalGUI(cardLayout, cardPane));
+        screenMap.put(ScreenType.ACCOUNT_BALANCE, new AccountBalanceGUI(cardLayout, cardPane));
     }
 
     public static Screen createScreen(ScreenType type) {
-        Screen      screen      = new LoginScreen();
-        JPanel      cardPane    = screen.getCardPane();
-        CardLayout  cardLayout  = screen.getCardLayout();
-
-        switch(type) {
-            case LOGIN ->           screen = new LoginScreen();
-            case REGISTER ->        screen = new RegisterScreen(cardLayout, cardPane);
-            case SELECTION_MENU ->  screen = new MenuScreen(cardLayout, cardPane);
-            case DEPOSIT ->         screen = new DepositScreen(cardLayout, cardPane);
-            case WITHDRAWAL ->      screen = new WithdrawScreen(cardLayout, cardPane);
-            case ACCOUNT_BALANCE -> screen = new AccountBalanceUI(cardLayout, cardPane);
-            default -> throw new IllegalArgumentException("Screen does not exist");
-        }
-        return screen;
+        return screenMap.get(type);
     }
+
 }

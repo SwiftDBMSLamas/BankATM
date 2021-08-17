@@ -15,6 +15,7 @@ public class MenuScreen extends Screen implements Frameable {
     private GridBagConstraints  constraints;
     private final JPanel        parentPane;
     private final CardLayout    parentCardLayout;
+    private Client        client;
 
     public MenuScreen(final CardLayout layout, final JPanel pane) {
         super();
@@ -64,19 +65,19 @@ public class MenuScreen extends Screen implements Frameable {
     @Override
     public void addListeners() {
         balanceTransactionButton.addActionListener( event -> {
-            final AccountBalanceUI screen = new AccountBalanceUI(parentCardLayout, parentPane);
+            final AccountBalanceGUI screen = new AccountBalanceGUI(parentCardLayout, parentPane);
             screen.createUI();
             frame.setTitle(resource.BALANCE_FRAME_TITLE());
         });
 
         withdrawalTransactionButton.addActionListener( event -> {
-            final WithdrawScreen screen = new WithdrawScreen(parentCardLayout, parentPane);
+            final WithdrawalGUI screen = new WithdrawalGUI(parentCardLayout, parentPane);
             screen.createUI();
             frame.setTitle(resource.WITHDRAW_FRAME_TITLE());
         });
 
         depositTransactionButton.addActionListener( event -> {
-            final DepositScreen screen = new DepositScreen(parentCardLayout, parentPane);
+            final DepositGUI screen = new DepositGUI(parentCardLayout, parentPane);
             screen.createUI();
             frame.setTitle(resource.DEPOSIT_FRAME_TITLE());
         });
@@ -113,7 +114,11 @@ public class MenuScreen extends Screen implements Frameable {
 
     @Override
     public void initComponents() {
-        transactionMenuWelcomeLabel     = new JLabel(resource.SELECTION_WELCOME_TXT());
+        client                          = Client.getClient(GET_CLIENT_REQUEST);
+        transactionMenuWelcomeLabel     = new JLabel(String.format(
+                                                        resource.SELECTION_WELCOME_TXT(),
+                                                        client.getFirstName(),
+                                                        client.getLastName()));
         balanceTransactionButton        = new JButton(resource.SELECTION_BALANCE_BTN());
         withdrawalTransactionButton     = new JButton(resource.SELECTION_WITHDRAW_BTN());
         depositTransactionButton        = new JButton(resource.SELECTION_DEPOSIT_BTN());

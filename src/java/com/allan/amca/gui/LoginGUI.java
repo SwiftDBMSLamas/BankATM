@@ -11,7 +11,11 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-public class LoginScreen extends Screen implements Frameable {
+/**
+ * Login screen subclass
+ * @author allanaranzaso
+ */
+public class LoginGUI extends Screen implements Frameable {
     private static final int        SEND_CLIENT_REQUEST = 1;
     private static JTextField       clientCardInputField;
     private static JPasswordField   clientPINPasswordField;
@@ -27,7 +31,7 @@ public class LoginScreen extends Screen implements Frameable {
     private Client                  client;
 
 
-    public LoginScreen() {
+    public LoginGUI() {
         super();
     }
 
@@ -78,8 +82,6 @@ public class LoginScreen extends Screen implements Frameable {
         parentPane.add(loginPanel, resource.LOGIN_PANEL());
         frame.add(parentPane);
         frame.repaint();
-
-        System.out.println("Finished initializing the LOGIN screen...");
     }
 
     private void createKeypad() {
@@ -99,30 +101,30 @@ public class LoginScreen extends Screen implements Frameable {
     public void addListeners() {
     //TODO: add error messages when login form is not filled out or does not match user/pass
         registerBtn.addActionListener( evt -> {
-            final Screen regTest = new RegisterScreen(parentCardLayout, parentPane);
-            regTest.createUI();
+            final Screen registerScreen = new RegisterScreen(parentCardLayout, parentPane);
+            registerScreen.createUI();
             frame.setTitle("Register");
         });
 
         loginBtn.addActionListener(evt -> {
-            final Login login = Login.getInstance();
             final boolean userAuthenticated;
-            final String clientCardStr = clientCardInputField.getText();
-            final long clientCard = Long.parseLong(clientCardStr);
-            final String pinStr = String.valueOf(clientPINPasswordField.getPassword());
+            final MenuScreen menuScreen;
+            final Login login           = Login.getInstance();
+            final String clientCardStr  = clientCardInputField.getText();
+            final long clientCard       = Long.parseLong(clientCardStr);
+            final String pinStr         = String.valueOf(clientPINPasswordField.getPassword());
 
             userAuthenticated = login.login(clientCard, pinStr);
             if (userAuthenticated) {
                 Dao<Client, Long> account = DaoFactory.createDao(DaoType.USER);
                 client = account.retrieve(clientCard);
-
                 Client.sendClient(SEND_CLIENT_REQUEST, client);
-                final MenuScreen menuScreen = new MenuScreen(parentCardLayout, parentPane);
+
+                menuScreen = new MenuScreen(parentCardLayout, parentPane);
                 menuScreen.createUI();
                 clientCardInputField.setText(null);
                 clientPINPasswordField.setText(null);
             }
-            //TODO: initialize the screens without saying new
         });
 
         clientPINPasswordField.addFocusListener(new FocusListener() {

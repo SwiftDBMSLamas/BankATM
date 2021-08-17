@@ -9,7 +9,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 
-public class AccountBalanceUI extends Screen implements Frameable {
+/**
+ * Account balance subclass
+ * @author allanaranzaso
+ */
+public class AccountBalanceGUI extends Screen implements Frameable {
     private JLabel              accountBalanceHeaderLabel;
     private JButton             printBalanceBtn;
     private JButton             printLastTransactionBtn;
@@ -26,7 +30,7 @@ public class AccountBalanceUI extends Screen implements Frameable {
         resource.getValues();
     }
 
-    public AccountBalanceUI(final CardLayout layout, final JPanel pane) {
+    public AccountBalanceGUI(final CardLayout layout, final JPanel pane) {
         this.parentCardLayout = layout;
         this.parentPane = pane;
     }
@@ -70,10 +74,8 @@ public class AccountBalanceUI extends Screen implements Frameable {
 
         printBalanceBtn.addActionListener( event -> {
             // show dialog with current balance
-            System.err.println("Client's current balance: ");
             Dao<Client, Long> accountDao = DaoFactory.createDao(DaoType.ACCOUNT);
             BigDecimal balance = accountDao.retrieve(client.getClientID());
-            System.out.println(balance);
             JOptionPane.showMessageDialog(
                     frame,
                     String.format("Your current balance is: $%s", balance),

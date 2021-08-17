@@ -1,13 +1,13 @@
 package com.allan.amca.data;
 
 import com.allan.amca.account.AccountDaoImpl;
-import com.allan.amca.user.UserDaoImpl;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.transaction.TransactionDaoImpl;
+import com.allan.amca.user.UserDaoImpl;
 
-public class DaoFactory {
-
-    public static final <T> Dao createDao(final DaoType type) {
+public class DaoFactory<T, N> {
+// generic method for creating DAO
+    public static Dao createDao(final DaoType type) {
         final Dao factory;
 
         switch (type) {

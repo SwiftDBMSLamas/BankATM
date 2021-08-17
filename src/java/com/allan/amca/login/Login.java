@@ -4,12 +4,11 @@ import com.allan.amca.data.DataResources;
 
 import java.sql.*;
 
-public class Login extends LoginViewModel {
+public class Login {
 
     private static final Login instance = new Login();
 
     private Login() {}
-// Can refactor this into a result class. call the method
     public boolean login(final Long clientID, final String pin) {
         final String URI            = DataResources.getDBUri();
         final String DB_USER        = DataResources.getDBUsername();
@@ -25,7 +24,6 @@ public class Login extends LoginViewModel {
                 result = validateLogin.executeQuery();
                 if (result.next()) {
                     resultValid = true;
-                    System.out.println("Login successful!");
                 }
             }
         } catch (SQLException ex) {

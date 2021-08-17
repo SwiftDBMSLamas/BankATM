@@ -25,8 +25,9 @@ public class Withdrawal extends Transaction {
      */
     @Override
     protected BigDecimal calculate(BigDecimal currentBalance, BigDecimal amount) {
-        if (currentBalance.compareTo(amount) < 0) {
-            throw new IllegalStateException("You do not have enough funds to withdraw the entered amount");
+        final int INVALID_AMT = 0;
+        if (currentBalance.compareTo(amount) < INVALID_AMT) {
+            throw new IllegalArgumentException("You do not have enough funds to withdraw the entered amount");
         }
         return currentBalance.subtract(amount);
     }

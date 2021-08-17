@@ -129,6 +129,26 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
         return clientExists;
     }
 
+    public static long getNewClientIDFromDB() {
+        final String SELECT_QUERY = "SELECT client_id FROM client ORDER BY client_id DESC LIMIT 1;";
+        final ResultSet result;
+        long newClientID = 0;
+
+        try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
+            try (PreparedStatement getIDStmt = connection.prepareStatement(SELECT_QUERY)) {
+                result = getIDStmt.executeQuery();
+
+                while (result.next()) {
+                    newClientID = result.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return newClientID;
+    }
+
     /**
      * Private method to retrieve a client from the database. Uses the resultSet from the getClient method to retrieve
      * the client

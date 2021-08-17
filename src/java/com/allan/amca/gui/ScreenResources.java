@@ -11,11 +11,20 @@ public final class ScreenResources {
     private String DEPOSIT_PANEL;
     private String WITHDRAW_PANEL;
     private String BALANCE_PANEL;
+    private String REGISTER_PANEL;
     private String LOGIN_PANEL;
     private String LOGIN_FRAME_TXT;
     private String LOGIN_CARD_LABEL;
     private String LOGIN_PIN_LABEL;
     private String LOGIN_SIGN_IN_BTN;
+    private String REGISTER_FRAME_TXT;
+    private String REGISTER_HEADER_TXT;
+    private String REGISTER_FIRSTNAME_LABEL;
+    private String REGISTER_LASTNAME_LABEL;
+    private String REGISTER_PIN_LABEL;
+    private String REGISTER_REG_BTN;
+    private String REGISTER_SUCCESS_MSG;
+    private String REGISTER_SUCCESS_TITLE;
     private String SELECTION_WELCOME_TXT;
     private String SELECTION_BALANCE_BTN;
     private String SELECTION_WITHDRAW_BTN;
@@ -33,6 +42,7 @@ public final class ScreenResources {
     private String DEPOSIT_HEADER_TXT;
     private String DEPOSIT_BTN;
     private String DEPOSIT_RETURN_BTN;
+    private String DEPOSIT_ERROR_TXT;
     private String WITHDRAW_DIALOG_TITLE;
     private String WITHDRAW_DIALOG_TXT;
     private String WITHDRAW_INSUFFICIENT_ERROR;
@@ -49,24 +59,29 @@ public final class ScreenResources {
 
     private String propFileName = "res_en.properties";
 
-    public String selectionPanel() {
+
+    public String SELECTION_PANEL() {
         return SELECTION_PANEL;
     }
 
-    public String depositPanel() {
+    public String DEPOSIT_PANEL() {
         return DEPOSIT_PANEL;
     }
 
-    public String withdrawPanel() {
+    public String WITHDRAW_PANEL() {
         return WITHDRAW_PANEL;
     }
 
-    public String balancePanel() {
+    public String BALANCE_PANEL() {
         return BALANCE_PANEL;
     }
 
-    public String loginPanel() {
+    public String LOGIN_PANEL() {
         return LOGIN_PANEL;
+    }
+
+    public String REGISTER_PANEL() {
+        return REGISTER_PANEL;
     }
 
     public String LOGIN_FRAME_TXT() {
@@ -83,6 +98,38 @@ public final class ScreenResources {
 
     public String LOGIN_SIGN_IN_BTN() {
         return LOGIN_SIGN_IN_BTN;
+    }
+
+    public String REGISTER_FRAME_TXT() {
+        return REGISTER_FRAME_TXT;
+    }
+
+    public String REGISTER_HEADER_TXT() {
+        return REGISTER_HEADER_TXT;
+    }
+
+    public String REGISTER_FIRSTNAME_LABEL() {
+        return REGISTER_FIRSTNAME_LABEL;
+    }
+
+    public String REGISTER_LASTNAME_LABEL() {
+        return REGISTER_LASTNAME_LABEL;
+    }
+
+    public String REGISTER_PIN_LABEL() {
+        return REGISTER_PIN_LABEL;
+    }
+
+    public String REGISTER_REG_BTN() {
+        return REGISTER_REG_BTN;
+    }
+
+    public String REGISTER_SUCCESS_MSG() {
+        return REGISTER_SUCCESS_MSG;
+    }
+
+    public String REGISTER_SUCCESS_TITLE() {
+        return REGISTER_SUCCESS_TITLE;
     }
 
     public String SELECTION_WELCOME_TXT() {
@@ -147,6 +194,10 @@ public final class ScreenResources {
 
     public String DEPOSIT_BTN() {
         return DEPOSIT_BTN;
+    }
+
+    public String DEPOSIT_ERROR_TXT() {
+        return DEPOSIT_ERROR_TXT;
     }
 
     public String DEPOSIT_RETURN_BTN() {
@@ -218,11 +269,20 @@ public final class ScreenResources {
             DEPOSIT_PANEL               = properties.getProperty("deposit.panel");
             WITHDRAW_PANEL              = properties.getProperty("withdraw.panel");
             BALANCE_PANEL               = properties.getProperty("balance.panel");
+            REGISTER_PANEL              = properties.getProperty("register.panel");
             LOGIN_PANEL                 = properties.getProperty("login.panel");
             LOGIN_FRAME_TXT             = properties.getProperty("login.frame");
             LOGIN_CARD_LABEL            = properties.getProperty("login.cardLabel");
             LOGIN_PIN_LABEL             = properties.getProperty("login.pinLabel");
             LOGIN_SIGN_IN_BTN           = properties.getProperty("login.signInBtn");
+            REGISTER_FRAME_TXT          = properties.getProperty("register.frame");
+            REGISTER_HEADER_TXT         = properties.getProperty("register.header");
+            REGISTER_FIRSTNAME_LABEL    = properties.getProperty("register.firstNameLabel");
+            REGISTER_LASTNAME_LABEL     = properties.getProperty("register.lastNameLabel");
+            REGISTER_PIN_LABEL          = properties.getProperty("register.pinLabel");
+            REGISTER_REG_BTN            = properties.getProperty("register.regBtn");
+            REGISTER_SUCCESS_MSG        = properties.getProperty("register.successMsg");
+            REGISTER_SUCCESS_TITLE      = properties.getProperty("register.successTitle");
             SELECTION_WELCOME_TXT       = properties.getProperty("selection.welcomeHeader");
             SELECTION_BALANCE_BTN       = properties.getProperty("selection.balanceBtn");
             SELECTION_WITHDRAW_BTN      = properties.getProperty("selection.withdrawalBtn");
@@ -240,6 +300,7 @@ public final class ScreenResources {
             DEPOSIT_HEADER_TXT          = properties.getProperty("deposit.headerLabel");
             DEPOSIT_BTN                 = properties.getProperty("deposit.btn");
             DEPOSIT_RETURN_BTN          = properties.getProperty("deposit.returnBtn");
+            DEPOSIT_ERROR_TXT           = properties.getProperty("deposit.incorrectAmt");
             WITHDRAW_DIALOG_TITLE       = properties.getProperty("withdraw.confirmDialogTitle");
             WITHDRAW_DIALOG_TXT         = properties.getProperty("withdraw.confirmDialogText");
             WITHDRAW_INSUFFICIENT_ERROR = properties.getProperty("withdraw.insufficientError");

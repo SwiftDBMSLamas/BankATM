@@ -5,5 +5,7 @@ public enum ScreenType {
     ACCOUNT_BALANCE,
     WITHDRAWAL,
     DEPOSIT,
-    SELECTION_MENU
+    SELECTION_MENU,
+    REGISTER,
+    LOGIN
 }

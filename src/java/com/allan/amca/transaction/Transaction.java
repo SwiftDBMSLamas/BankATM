@@ -20,7 +20,7 @@ public abstract class Transaction
         extends TransactionFactory
         implements Transactional {
 
-    private final Dao<Client, Number> accountDao            = DaoFactory.createDao(DaoType.ACCOUNT);
+    private final Dao<Client, Long> accountDao              = DaoFactory.createDao(DaoType.ACCOUNT);
     private static final String DB_URI                      = DataResources.getDBUri();
     private static final String DB_USER                     = DataResources.getDBUsername();
     private static final String DB_PASS                     = DataResources.getDBPassword();
@@ -127,8 +127,12 @@ public abstract class Transaction
     @Override
     public final boolean performTransaction(final long clientID,
                                             final BigDecimal amount){
-        final int BALANCE_PARAM     = 1;
-        final int CLIENT_ID_PARAM   = 2;
+        final int BALANCE_PARAM                 = 1;
+        final int CLIENT_ID_PARAM               = 2;
+        final int TRANSACTION_TYPE_PARAM        = 1;
+        final int TRANSACTION_DATE_PARAM        = 2;
+        final int TRANSACTION_AMT_PARAM         = 3;
+        final int TRANSACTION_CLIENT_ID_PARAM   = 4;
         final int NO_RECORDS        = 0;
         final String UPDATE_QUERY   = "UPDATE account SET balance = ? WHERE clientID = ?;";
         final String INSERT_QUERY   = "INSERT INTO Transactions " +
@@ -160,10 +164,10 @@ public abstract class Transaction
                 if (recordsUpdated > NO_RECORDS) {
                     transactionSuccess = true;
                     try (PreparedStatement write = connection.prepareStatement(INSERT_QUERY)) {
-                        write.setString(1, this.getTransactionType());
-                        write.setString(2, this.getTransactionDate());
-                        write.setBigDecimal(3, this.getTransactionAmount());
-                        write.setLong(4, clientID);
+                        write.setString(TRANSACTION_TYPE_PARAM, this.getTransactionType());
+                        write.setString(TRANSACTION_DATE_PARAM, this.getTransactionDate());
+                        write.setBigDecimal(TRANSACTION_AMT_PARAM, this.getTransactionAmount());
+                        write.setLong(TRANSACTION_CLIENT_ID_PARAM, clientID);
                         write.executeUpdate();
                     }
                 }

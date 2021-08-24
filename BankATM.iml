@@ -48,5 +48,6 @@
     </orderEntry>
     <orderEntry type="library" name="io.cucumber.junit" level="project" />
     <orderEntry type="library" name="hamcrest" level="project" />
+    <orderEntry type="library" name="mindrot.jbcrypt" level="project" />
   </component>
 </module>

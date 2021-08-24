@@ -42,7 +42,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
     @Override
     protected final boolean addRecord(@NotNull final Transaction transaction) {
         final int numOfRecordsInserted;
-        final String QUERY = "INSERT INTO Transactions (transaction_type, transaction_date, transaction_amount, client_id) " +
+        final String QUERY = "INSERT INTO transactions (transaction_type, transaction_date, transaction_amount, client_id) " +
                              "VALUES (?, ?, ?, ?);";
         boolean transactionAdded = false;
         Client client = Client.getClient(CLIENT_REQUEST);
@@ -95,7 +95,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
     @Override
     protected Transaction readRecord(Long toRetrieve) {
         final String QUERY = "SELECT transaction_id, transaction_type, transaction_date, transaction_amount " +
-                "FROM Transactions " +
+                "FROM transactions " +
                 "WHERE transaction_id = ?";
         Transaction retrievedTransaction    = null;
         final int transactionID             = toRetrieve.intValue();
@@ -137,7 +137,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
      */
     @Override
     protected boolean deleteRecord(Transaction toDelete) {
-        final String QUERY = "DELETE FROM Transactions WHERE transaction_id = ?";
+        final String QUERY = "DELETE FROM transactions WHERE transaction_id = ?";
         final int transactionID = toDelete.getTransactionID();
         final int recordsDeleted;
         boolean deleteSuccess = false;
@@ -167,7 +167,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
      */
     @Override
     protected boolean executeUpdate(Transaction transaction, Long id) {
-        final String QUERY = "UPDATE Transactions SET transaction_type = ?," +
+        final String QUERY = "UPDATE transactions SET transaction_type = ?," +
                 "transaction_date = ?, transaction_amount = ?" +
                 "WHERE transaction_id = ?";
         final int transactionID = id.intValue();

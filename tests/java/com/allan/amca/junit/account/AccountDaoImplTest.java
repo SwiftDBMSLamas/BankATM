@@ -13,12 +13,12 @@ import java.sql.SQLException;
 class AccountDaoImplTest extends DaoAbstractTest {
 
     @Test
-    void readRecord() throws SQLException {
+    void readRecord() {
         Dao daoImpl = DaoFactory.createDao(DaoType.ACCOUNT);
 
-        retrieve(daoImpl, 4519011123012370L, BigDecimal.valueOf(1243.51));
-        retrieve(daoImpl, 4519011123012372L, BigDecimal.valueOf(37000.00));
-        retrieve(daoImpl, 4519011123012380L, BigDecimal.valueOf(2000.0));
+        retrieve(daoImpl, 4519011123012000L, BigDecimal.valueOf(800.0));
+        retrieve(daoImpl, 4519011123012016L, BigDecimal.valueOf(17144.0));
+        retrieve(daoImpl, 4519011123012017L, BigDecimal.valueOf(0.0));
     }
 
     @Test
@@ -45,27 +45,12 @@ class AccountDaoImplTest extends DaoAbstractTest {
         create(daoImpl, clientToAdd, true);
     }
 
-//    @Test
-    void deleteRecord() throws SQLException {
-        Dao daoImpl                         = DaoFactory.createDao(DaoType.ACCOUNT);
-        Dao<Client, Long> retrieveUser      = DaoFactory.createDao(DaoType.USER);
-        Client clientToDelete               = retrieveUser.retrieve(4519011123012445L);
-
-        if (clientToDelete != null) {
-            /**
-             * if user exists during the test, perform the test. The test will recreate the object afterwards
-             * This is to prevent any false positives while running the unit tests
-             */
-            delete(daoImpl, clientToDelete, true);
-        }
-        daoImpl.create(clientToDelete);
-    }
 
     @Test
     void executeUpdate() throws SQLException {
         Dao daoImpl                     = DaoFactory.createDao(DaoType.ACCOUNT);
         Dao<Client, Long> retrieveUser  = DaoFactory.createDao(DaoType.USER);
-        Client clientToUpdate           = retrieveUser.retrieve(4519011123012380L);
+        Client clientToUpdate           = retrieveUser.retrieve(4519011123012018L);
 
         update(daoImpl, 2000L , clientToUpdate, true);
     }

@@ -25,8 +25,6 @@ public class Account extends AccountDaoImpl {
         this.accountBalance = balance;
     }
 
-    //open account method, gets client ID- inserts it into the account db with balance set to 0?
-
     /**
      * Validates the balance being input. For now, set to throw exception if value is negative.
      * @param balance the balance to validate. Cannot be negative.

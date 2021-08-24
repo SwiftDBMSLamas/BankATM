@@ -15,17 +15,17 @@ class ClientTest extends PersonTest {
     @Test
     void getClientID() {
         Dao<Client, Long> clientDao = DaoFactory.createDao(DaoType.USER);
-        Client client1 =  clientDao.retrieve(4519011123012372L);
-        Client client2 =  clientDao.retrieve(4519011123012374L);
-        Client client3 =  clientDao.retrieve(4519011123012394L);
-        Client client4 =  clientDao.retrieve(4519011123012397L);
-        Client client5 =  clientDao.retrieve(4519011123012414L);
+        Client client1 =  clientDao.retrieve(4519011123012001L);
+        Client client2 =  clientDao.retrieve(4519011123012002L);
+        Client client3 =  clientDao.retrieve(4519011123012003L);
+        Client client4 =  clientDao.retrieve(4519011123012004L);
+        Client client5 =  clientDao.retrieve(4519011123012005L);
 
-        getClientIDFromDB(client1, 4519011123012372L);
-        getClientIDFromDB(client2,4519011123012374L);
-        getClientIDFromDB(client3, 4519011123012394L);
-        getClientIDFromDB(client4, 4519011123012397L);
-        getClientIDFromDB(client5, 4519011123012414L);
+        getClientIDFromDB(client1, 4519011123012001L);
+        getClientIDFromDB(client2,4519011123012002L);
+        getClientIDFromDB(client3, 4519011123012003L);
+        getClientIDFromDB(client4, 4519011123012004L);
+        getClientIDFromDB(client5, 4519011123012005L);
     }
 
     @Test

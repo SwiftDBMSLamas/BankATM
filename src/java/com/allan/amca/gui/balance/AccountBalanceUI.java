@@ -1,8 +1,10 @@
-package com.allan.amca.gui;
+package com.allan.amca.gui.balance;
 
 import com.allan.amca.data.Dao;
 import com.allan.amca.data.DaoFactory;
 import com.allan.amca.enums.DaoType;
+import com.allan.amca.gui.Frameable;
+import com.allan.amca.gui.Screen;
 import com.allan.amca.user.Client;
 
 import javax.swing.*;
@@ -13,7 +15,7 @@ import java.math.BigDecimal;
  * Account balance subclass
  * @author allanaranzaso
  */
-public class AccountBalanceGUI extends Screen implements Frameable {
+public class AccountBalanceUI extends Screen implements Frameable {
     private JLabel              accountBalanceHeaderLabel;
     private JButton             printBalanceBtn;
     private JButton             printLastTransactionBtn;
@@ -24,13 +26,14 @@ public class AccountBalanceGUI extends Screen implements Frameable {
     private final JPanel        parentPane;
     private final CardLayout    parentCardLayout;
     private final Client        client;
+    private final AccountBalanceResources r = new AccountBalanceResources();
 
     {
         client = Client.getClient(GET_CLIENT_REQUEST);
-        resource.getValues();
+        r.getPropertyValues();
     }
 
-    public AccountBalanceGUI(final CardLayout layout, final JPanel pane) {
+    public AccountBalanceUI(final CardLayout layout, final JPanel pane) {
         this.parentCardLayout = layout;
         this.parentPane = pane;
     }
@@ -62,15 +65,15 @@ public class AccountBalanceGUI extends Screen implements Frameable {
         constraints.gridy= -1;
         accountBalancePanel.add(returnBtn, constraints);
 
-        parentPane.add(accountBalancePanel, resource.BALANCE_PANEL());
-        parentCardLayout.show(parentPane, resource.BALANCE_PANEL());
+        parentPane.add(accountBalancePanel, r.BALANCE_PANEL());
+        parentCardLayout.show(parentPane, r.BALANCE_PANEL());
         frame.repaint();
     }
 
     @Override
     public void addListeners() {
         //TODO: determine the behaviour of these buttons
-        returnBtn.addActionListener( event -> parentCardLayout.show(parentPane, resource.SELECTION_PANEL()));
+        returnBtn.addActionListener( event -> parentCardLayout.show(parentPane, r.SELECTION_PANEL()));
 
         printBalanceBtn.addActionListener( event -> {
             // show dialog with current balance
@@ -95,12 +98,12 @@ public class AccountBalanceGUI extends Screen implements Frameable {
 
     @Override
     public void initComponents() {
-        accountBalanceHeaderLabel   = new JLabel(resource.BALANCE_HEADER_TXT());
-        printBalanceBtn             = new JButton(resource.BALANCE_PRINT_BTN());
-        printLastTransactionBtn     = new JButton(resource.BALANCE_PRINT_LAST_BTN());
-        printTransactionsBtn        = new JButton(resource.BALANCE_PRINT_TRANSACTIONS_BTN());
+        accountBalanceHeaderLabel   = new JLabel(r.BALANCE_HEADER_TXT());
+        printBalanceBtn             = new JButton(r.BALANCE_PRINT_BTN());
+        printLastTransactionBtn     = new JButton(r.BALANCE_PRINT_LAST_BTN());
+        printTransactionsBtn        = new JButton(r.BALANCE_PRINT_TRANSACTIONS_BTN());
         accountBalancePanel         = new JPanel(new GridBagLayout());
-        returnBtn                   = new JButton(resource.BALANCE_RETURN_BTN());
+        returnBtn                   = new JButton(r.BALANCE_RETURN_BTN());
         constraints                 = new GridBagConstraints();
     }
 }

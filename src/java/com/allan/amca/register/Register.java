@@ -2,6 +2,7 @@ package com.allan.amca.register;
 
 import com.allan.amca.data.Dao;
 import com.allan.amca.data.DaoFactory;
+import com.allan.amca.data.PINCryptUtils;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.user.Client;
 import com.allan.amca.user.UserDaoImpl;
@@ -24,6 +25,10 @@ public class Register {
         registerSuccess = dao.create(UserFactory.createUser(firstName, lastName, pin));
         if (registerSuccess) {
             newClient = dao.retrieve(UserDaoImpl.getNewClientIDFromDB());
+            final String salt = PINCryptUtils.getSalt(30);
+            final String securePin = PINCryptUtils.generateSecurePIN(pin, salt);
+            PINCryptUtils.updatePinAndSalt(securePin, salt);
+
             openAccount(newClient);
             Client.sendClient(NEW_CLIENT_SEND_REQ, newClient);
         }

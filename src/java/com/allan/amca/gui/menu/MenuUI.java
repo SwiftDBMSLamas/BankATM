@@ -1,11 +1,15 @@
-package com.allan.amca.gui;
+package com.allan.amca.gui.menu;
 
+import com.allan.amca.gui.*;
+import com.allan.amca.gui.balance.AccountBalanceUI;
+import com.allan.amca.gui.deposit.DepositUI;
+import com.allan.amca.gui.withdraw.WithdrawalUI;
 import com.allan.amca.user.Client;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuScreen extends Screen implements Frameable {
+public class MenuUI extends Screen implements Frameable {
     private JLabel              transactionMenuWelcomeLabel;
     private JButton             balanceTransactionButton;
     private JButton             withdrawalTransactionButton;
@@ -16,8 +20,13 @@ public class MenuScreen extends Screen implements Frameable {
     private final JPanel        parentPane;
     private final CardLayout    parentCardLayout;
     private Client        client;
+    private final MenuResources r = new MenuResources();
 
-    public MenuScreen(final CardLayout layout, final JPanel pane) {
+    {
+        r.getPropertyValues();
+    }
+
+    public MenuUI(final CardLayout layout, final JPanel pane) {
         super();
         this.parentCardLayout = layout;
         this.parentPane = pane;
@@ -34,57 +43,48 @@ public class MenuScreen extends Screen implements Frameable {
         selectionPanel.add(transactionMenuWelcomeLabel, constraints);
 
         // Balance btn
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridwidth = 1;
-        constraints.gridx = 0;
         constraints.gridy = 1;
         selectionPanel.add(balanceTransactionButton, constraints);
 
         // Withdraw btn
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridwidth = 1;
-        constraints.gridx = 0;
         constraints.gridy = 2;
         selectionPanel.add(withdrawalTransactionButton, constraints);
 
         // Deposit btn
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridwidth = 1;
-        constraints.gridx = 0;
         constraints.gridy = 3;
         selectionPanel.add(depositTransactionButton, constraints);
 
         // Exit btn
         constraints.gridy = 4;
         selectionPanel.add(exitTransactionButton, constraints);
-        parentPane.add(selectionPanel, resource.SELECTION_PANEL());
-        parentCardLayout.show(parentPane, resource.SELECTION_PANEL());
+        parentPane.add(selectionPanel, r.SELECTION_PANEL());
+        parentCardLayout.show(parentPane, r.SELECTION_PANEL());
         frame.repaint();
     }
 
     @Override
     public void addListeners() {
         balanceTransactionButton.addActionListener( event -> {
-            final AccountBalanceGUI screen = new AccountBalanceGUI(parentCardLayout, parentPane);
+            final AccountBalanceUI screen = new AccountBalanceUI(parentCardLayout, parentPane);
             screen.createUI();
-            frame.setTitle(resource.BALANCE_FRAME_TITLE());
+            frame.setTitle(r.BALANCE_FRAME_TITLE());
         });
 
         withdrawalTransactionButton.addActionListener( event -> {
-            final WithdrawalGUI screen = new WithdrawalGUI(parentCardLayout, parentPane);
+            final WithdrawalUI screen = new WithdrawalUI(parentCardLayout, parentPane);
             screen.createUI();
-            frame.setTitle(resource.WITHDRAW_FRAME_TITLE());
+            frame.setTitle(r.WITHDRAW_FRAME_TITLE());
         });
 
         depositTransactionButton.addActionListener( event -> {
-            final DepositGUI screen = new DepositGUI(parentCardLayout, parentPane);
+            final DepositUI screen = new DepositUI(parentCardLayout, parentPane);
             screen.createUI();
-            frame.setTitle(resource.DEPOSIT_FRAME_TITLE());
+            frame.setTitle(r.DEPOSIT_FRAME_TITLE());
         });
 
         exitTransactionButton.addActionListener( event -> {
-            final JDialog dialog            = new JDialog(frame, resource.SELECTION_DIALOG_TITLE(), true);
-            final JOptionPane logoutPane    = new JOptionPane(resource.SELECTION_DIALOG_TEXT(),
+            final JDialog dialog            = new JDialog(frame, r.SELECTION_DIALOG_TITLE(), true);
+            final JOptionPane logoutPane    = new JOptionPane(r.SELECTION_DIALOG_TEXT(),
                                                 JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
 
             dialog.setLocationRelativeTo(null);
@@ -116,13 +116,13 @@ public class MenuScreen extends Screen implements Frameable {
     public void initComponents() {
         client                          = Client.getClient(GET_CLIENT_REQUEST);
         transactionMenuWelcomeLabel     = new JLabel(String.format(
-                                                        resource.SELECTION_WELCOME_TXT(),
+                                                        r.SELECTION_WELCOME_TXT(),
                                                         client.getFirstName(),
                                                         client.getLastName()));
-        balanceTransactionButton        = new JButton(resource.SELECTION_BALANCE_BTN());
-        withdrawalTransactionButton     = new JButton(resource.SELECTION_WITHDRAW_BTN());
-        depositTransactionButton        = new JButton(resource.SELECTION_DEPOSIT_BTN());
-        exitTransactionButton           = new JButton(resource.SELECTION_EXIT_BTN());
+        balanceTransactionButton        = new JButton(r.SELECTION_BALANCE_BTN());
+        withdrawalTransactionButton     = new JButton(r.SELECTION_WITHDRAW_BTN());
+        depositTransactionButton        = new JButton(r.SELECTION_DEPOSIT_BTN());
+        exitTransactionButton           = new JButton(r.SELECTION_EXIT_BTN());
         selectionPanel                  = new JPanel(new GridBagLayout());
         constraints                     = new GridBagConstraints();
     }

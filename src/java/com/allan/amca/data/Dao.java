@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @author allanaranzaso
  * @version 1.0
  */
-public interface Dao<T, N> {
+public interface Dao<T, N>{
 
     boolean create(T toCreate) throws SQLException;
     boolean update(T toUpdate, N id) throws SQLException;

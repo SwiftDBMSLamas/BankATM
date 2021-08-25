@@ -51,11 +51,11 @@ class TransactionBaseTest extends TransactionTest {
         Transaction withdraw2 = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
         Transaction deposit2 = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
 
-        withdraw.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0));
-        deposit.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0));
+        deposit.performTransaction(4519011123012000L, BigDecimal.valueOf(100.0));
+        withdraw.performTransaction(4519011123012000L, BigDecimal.valueOf(100.0));
 
-        deposit2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0));
-        withdraw2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0));
+        deposit2.performTransaction(4519011123012016L, BigDecimal.valueOf(2143.0));
+        withdraw2.performTransaction(4519011123012016L, BigDecimal.valueOf(2143.0));
 
         getAmount(withdraw, withdraw.getTransactionAmount());
         getAmount(deposit, deposit.getTransactionAmount());
@@ -66,9 +66,9 @@ class TransactionBaseTest extends TransactionTest {
     @Test
     void getTransactionID() {
         Dao<Transaction, Long> transactionDao = DaoFactory.createDao(DaoType.TRANSACTION);
-        Transaction retrievedT = transactionDao.retrieve(12L);
+        Transaction retrievedT = transactionDao.retrieve(1L);
 
-        getID(retrievedT, 12);
+        getID(retrievedT, 1);
     }
 
     @Test
@@ -78,10 +78,10 @@ class TransactionBaseTest extends TransactionTest {
         Transaction withdraw2 = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
         Transaction deposit2 = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
 
-        Assertions.assertTrue(withdraw.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0)));
-        Assertions.assertTrue(deposit.performTransaction(4519011123012444L, BigDecimal.valueOf(100.0)));
+        Assertions.assertTrue(withdraw.performTransaction(4519011123012000L, BigDecimal.valueOf(100.0)));
+        Assertions.assertTrue(deposit.performTransaction(4519011123012000L, BigDecimal.valueOf(100.0)));
 
-        Assertions.assertTrue(deposit2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0)));
-        Assertions.assertTrue(withdraw2.performTransaction(4519011123012372L, BigDecimal.valueOf(2143.0)));
+        Assertions.assertTrue(deposit2.performTransaction(4519011123012016L, BigDecimal.valueOf(2143.0)));
+        Assertions.assertTrue(withdraw2.performTransaction(4519011123012016L, BigDecimal.valueOf(2143.0)));
     }
 }

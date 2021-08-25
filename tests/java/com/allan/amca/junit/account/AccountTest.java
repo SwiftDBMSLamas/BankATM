@@ -15,9 +15,9 @@ class AccountTest {
 
     @Test
     void getAccountBalance() {
-        getBalance(4519011123012372L, BigDecimal.valueOf(37000.0));
-        getBalance(4519011123012370L, BigDecimal.valueOf(1243.51));
-        getBalance(4519011123012380L, BigDecimal.valueOf(2000.0));
+        getBalance(4519011123012000L, BigDecimal.valueOf(800.0));
+        getBalance(4519011123012016L, BigDecimal.valueOf(17144.0));
+        getBalance(4519011123012018L, BigDecimal.valueOf(2000.0));
     }
 
     protected void getBalance(final long        clientID,

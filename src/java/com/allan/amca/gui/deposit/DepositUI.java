@@ -1,6 +1,8 @@
-package com.allan.amca.gui;
+package com.allan.amca.gui.deposit;
 
 import com.allan.amca.enums.TransactionType;
+import com.allan.amca.gui.Frameable;
+import com.allan.amca.gui.Screen;
 import com.allan.amca.transaction.Transaction;
 import com.allan.amca.transaction.TransactionFactory;
 import com.allan.amca.user.Client;
@@ -13,7 +15,7 @@ import java.math.BigDecimal;
  * Deposit subclass UI
  * @author allanaranzaso
  */
-public class DepositGUI extends Screen implements Frameable {
+public class DepositUI extends Screen implements Frameable {
     private JLabel headDepositLabel;
     private JTextField depositTxtField;
     private JButton depositBtn;
@@ -22,14 +24,14 @@ public class DepositGUI extends Screen implements Frameable {
     private GridBagConstraints constraints;
     private final JPanel parentPane;
     private final CardLayout parentCardLayout;
-    private final ScreenResources resource = new ScreenResources();
+    private final DepositResources r = new DepositResources();
     private final Client client = Client.getClient(1);
 
     {
-        resource.getValues();
+        r.getPropertyValues();
     }
 
-    public DepositGUI(final CardLayout layout, final JPanel pane) {
+    public DepositUI(final CardLayout layout, final JPanel pane) {
         this.parentCardLayout = layout;
         this.parentPane = pane;
     }
@@ -37,8 +39,6 @@ public class DepositGUI extends Screen implements Frameable {
     @Override
     protected void updateUI() {
         // Header Label
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 0;
         depositPanel.add(headDepositLabel, constraints);
@@ -55,21 +55,21 @@ public class DepositGUI extends Screen implements Frameable {
         constraints.gridy = 3;
         depositPanel.add(returnBtn, constraints);
 
-        parentPane.add(depositPanel, resource.DEPOSIT_PANEL());
-        parentCardLayout.show(parentPane, resource.DEPOSIT_PANEL());
+        parentPane.add(depositPanel, r.DEPOSIT_PANEL());
+        parentCardLayout.show(parentPane, r.DEPOSIT_PANEL());
         frame.repaint();
     }
 
     @Override
     public void addListeners() {
-        returnBtn.addActionListener(event -> parentCardLayout.show(parentPane, resource.SELECTION_PANEL()));
+        returnBtn.addActionListener(event -> parentCardLayout.show(parentPane, r.SELECTION_PANEL()));
         depositBtn.addActionListener( event -> {
 
             final boolean[] transactionSuccess      = new boolean[1];
             final BigDecimal depositAmt             = BigDecimal.valueOf( Double.parseDouble( depositTxtField.getText() ) );
             final Transaction depositTransaction    = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
-            final JDialog dialog                    = new JDialog(frame, resource.DEPOSIT_DIALOG_TITLE(), true);
-            final JOptionPane confirmPane           = new JOptionPane(String.format(resource.DEPOSIT_DIALOG_TEXT(), depositAmt),
+            final JDialog dialog                    = new JDialog(frame, r.DEPOSIT_DIALOG_TITLE(), true);
+            final JOptionPane confirmPane           = new JOptionPane(String.format(r.DEPOSIT_DIALOG_TEXT(), depositAmt),
                                                         JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_NO_OPTION);
 
             dialog.setLocationRelativeTo(null);
@@ -94,17 +94,17 @@ public class DepositGUI extends Screen implements Frameable {
                             dialog.dispose();
                             JOptionPane.showMessageDialog(
                                     frame,
-                                    resource.DEPOSIT_ERROR_TXT(),
-                                    resource.WITHDRAW_ERROR_TITLE(),
+                                    r.DEPOSIT_ERROR_TXT(),
+                                    r.DEPOSIT_ERROR_TITLE(),
                                     JOptionPane.WARNING_MESSAGE);
                         }
-                        for (int i = 0; i < transactionSuccess.length; i++) {
-                            if (transactionSuccess[i]) {
+                        for (boolean success : transactionSuccess) {
+                            if (success) {
                                 dialog.dispose();
                                 JOptionPane.showMessageDialog(frame,
-                                        resource.DEPOSIT_SUCCESS_MSG());
+                                        r.DEPOSIT_SUCCESS_MSG());
                                 setLocationRelativeTo(null);
-                                parentCardLayout.show(parentPane, resource.SELECTION_PANEL());
+                                parentCardLayout.show(parentPane, r.SELECTION_PANEL());
                             }
                         }
                     } else if (value == JOptionPane.NO_OPTION) {
@@ -120,10 +120,10 @@ public class DepositGUI extends Screen implements Frameable {
 
     @Override
     public void initComponents() {
-        headDepositLabel    = new JLabel(resource.DEPOSIT_HEADER_TXT());
-        depositTxtField     = new JTextField(15);
-        depositBtn          = new JButton(resource.DEPOSIT_BTN());
-        returnBtn           = new JButton(resource.DEPOSIT_RETURN_BTN());
+        headDepositLabel    = new JLabel(r.DEPOSIT_HEADER_TXT());
+        depositTxtField     = new JTextField(10);
+        depositBtn          = new JButton(r.DEPOSIT_BTN());
+        returnBtn           = new JButton(r.DEPOSIT_RETURN_BTN());
         depositPanel        = new JPanel(new GridBagLayout());
         constraints         = new GridBagConstraints();
     }

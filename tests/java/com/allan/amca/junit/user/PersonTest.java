@@ -7,7 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-abstract class PersonTest {
+class PersonTest {
 
     protected void test(final Client  client,
                         final int     request) {

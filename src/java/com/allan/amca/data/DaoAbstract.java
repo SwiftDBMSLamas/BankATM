@@ -4,6 +4,10 @@ import java.sql.SQLException;
 
 public abstract class DaoAbstract<T, N> implements Dao<T, N> {
 
+    public void onFirstStart() {
+
+    }
+
     @Override
     public final boolean update(T client, N id) throws SQLException {
         if (client == null || id == null) {

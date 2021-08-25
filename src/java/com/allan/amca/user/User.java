@@ -1,4 +1,5 @@
 package com.allan.amca.user;
+
 public abstract class User implements Person {
 
     private String          firstName;
@@ -13,9 +14,9 @@ public abstract class User implements Person {
      */
     protected User(final String firstName, final String lastName, final String pin) {
         validateUser(firstName, lastName, pin);
+        this.pin = pin;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.pin = pin;
     }
 
     /**
@@ -39,7 +40,7 @@ public abstract class User implements Person {
         if (lastName == null || lastName.isEmpty()) {
             throw new IllegalArgumentException(LAST_EMPTY);
         }
-        if (pin.length() < PIN_LIMIT) {
+        if (pin == null || pin.length() < PIN_LIMIT) {
             throw new IllegalArgumentException(PW_EMPTY);
         }
     }

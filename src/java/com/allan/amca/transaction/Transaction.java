@@ -134,7 +134,7 @@ public abstract class Transaction
         final int TRANSACTION_AMT_PARAM         = 3;
         final int TRANSACTION_CLIENT_ID_PARAM   = 4;
         final int NO_RECORDS        = 0;
-        final String UPDATE_QUERY   = "UPDATE account SET balance = ? WHERE clientID = ?;";
+        final String UPDATE_QUERY   = "UPDATE accounts SET balance = ? WHERE client_id = ?;";
         final String INSERT_QUERY   = "INSERT INTO Transactions " +
                 "(transaction_type, transaction_date, transaction_amount, client_id) " +
                 "VALUES(?, ?, ?, ?)";

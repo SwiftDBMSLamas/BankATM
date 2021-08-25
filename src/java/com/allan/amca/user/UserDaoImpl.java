@@ -15,12 +15,11 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
     /**
      * Table name
      */
-    private static final String TABLE_CLIENT                = "client";
+    private static final String TABLE_CLIENT                = "clients";
 
     /**
      * Table columns
      */
-    private static final String COLUMN_CLIENT_ID            = "client_id";
     private static final String COLUMN_CLIENT_FIRSTNAME     = "first_name";
     private static final String COLUMN_CLIENT_LASTNAME      = "last_name";
     private static final String COLUMN_CLIENT_PIN           = "pin";
@@ -39,37 +38,6 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
 
     public static UserDaoImpl newInstance() {
         return instance;
-    }
-    /**
-     *  Creates database on start if it doesn't already exist
-      */
-    public void onCreate() {
-        final String DATABASE_NAME               = "Clients";
-        final String CREATE_CLIENT_DB            = "CREATE DATABASE IF NOT EXISTS " + DATABASE_NAME;
-        final String CREATE_CLIENT_TABLE = "CREATE TABLE " + TABLE_CLIENT + "("
-                + COLUMN_CLIENT_ID + " INT NOT NULL,"
-                + COLUMN_CLIENT_FIRSTNAME + " VARCHAR(30) NOT NULL,"
-                + COLUMN_CLIENT_LASTNAME + " VARCHAR(40) NOT NULL,"
-                + COLUMN_CLIENT_PIN + " TEXT NOT NULL,"
-                + "PRIMARY KEY (" + COLUMN_CLIENT_ID + ")" + ");";
-
-        try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
-            try (PreparedStatement createDB = connection.prepareStatement(CREATE_CLIENT_DB);
-                PreparedStatement createTable = connection.prepareStatement(CREATE_CLIENT_TABLE)) {
-                connection.setAutoCommit(false);
-
-                createDB.execute();
-                createTable.execute();
-
-                DatabaseMetaData metaData = connection.getMetaData();
-                System.out.printf("The driver name is: %s \n", metaData.getDriverName());
-                System.out.println("A new database has been successfully created");
-            }
-            connection.commit();
-        } catch (SQLException ex) {
-            System.err.println("Message: " + ex.getMessage());
-            System.err.println("Cause: " + ex.getCause());
-        }
     }
 
     /** Adds client to the database
@@ -130,7 +98,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
     }
 
     public static long getNewClientIDFromDB() {
-        final String SELECT_QUERY = "SELECT client_id FROM client ORDER BY client_id DESC LIMIT 1;";
+        final String SELECT_QUERY = "SELECT client_id FROM clients ORDER BY client_id DESC LIMIT 1;";
         final ResultSet result;
         long newClientID = 0;
 
@@ -157,7 +125,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
      */
     private Client getClientFromDatabase(final long clientID) {
         final ResultSet resultSet;
-        final String SELECT_CLIENT_QUERY = "SELECT * FROM client WHERE client_id = ?";
+        final String SELECT_CLIENT_QUERY = "SELECT * FROM clients WHERE client_id = ?";
         final int CLIENT_ID_PARAM        = 1;
 
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
@@ -249,7 +217,7 @@ public class UserDaoImpl extends DaoAbstract<Client, Long> {
      */
     @Override
     protected boolean deleteRecord(@NotNull final Client clientID) {
-        final String DELETE_USER = "DELETE FROM client WHERE client_id = ?;";
+        final String DELETE_USER = "DELETE FROM clients WHERE client_id = ?;";
         final int CLIENT_ID_PARAM = 1;
         final int recordsDeleted;
         boolean clientDeleted    = false;

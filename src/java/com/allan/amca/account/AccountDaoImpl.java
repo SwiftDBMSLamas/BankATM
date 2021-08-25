@@ -21,7 +21,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
     @Override
     protected BigDecimal readRecord(final Long accountID) {
         final int ACCOUNT_ID_PARAM  = 1;
-        final String QUERY          = "SELECT balance FROM account WHERE clientID = ?;";
+        final String QUERY          = "SELECT balance FROM accounts WHERE client_id = ?;";
         final int    BALANCE_COL    = 1;
         ResultSet rs;
         BigDecimal retrievedBalance = BigDecimal.valueOf(0.0);
@@ -52,7 +52,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
      */
     @Override
     protected boolean addRecord(Client toCreate) {
-        final String ADD_QUERY = "INSERT INTO account (clientID, balance) VALUES (?,?)";
+        final String ADD_QUERY = "INSERT INTO accounts (client_id, balance) VALUES (?,?)";
         final int CLIENT_ID_PARAM = 1;
         final int BALANCE_PARAM = 2;
         final BigDecimal OPENING_BALANCE = BigDecimal.valueOf(0.0);
@@ -77,13 +77,17 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
     }
 
     /**
-     * Delete client's account from the database. This will "close" a client's account.
+     * The foreign key constraint with the transactions and client tables will prevent this method from executing.
+     * An SQL exception will be thrown unless the foreign key is dropped and the record is deleted.
+     * For purposes of this project, there is an implementation just for the sake of overriding the method.
+     * The application's code does not call this method to close a client's account. It is not part of requirements
+     * I have identified to deal with.
      * @param toDelete the client to delete from the database.
      * @return true if the query executed successfully. Otherwise, false.
      */
     @Override
     protected boolean deleteRecord(Client toDelete) {
-        final String DELETE_QUERY = "DELETE FROM account WHERE clientID = ?";
+        final String DELETE_QUERY = "DELETE FROM accounts WHERE client_id = ?";
         final long clientID = toDelete.getClientID();
         final int CLIENT_ID_PARAM = 1;
         final int recordsDeleted;
@@ -119,7 +123,7 @@ public class AccountDaoImpl extends DaoAbstract<Client, Long> {
         final long clientID = client.getClientID();
         final int BALANCE_PARAM = 1;
         final int CLIENT_ID_PARAM = 2;
-        final String UPDATE_QUERY = "UPDATE account SET balance = ? WHERE clientID = ?";
+        final String UPDATE_QUERY = "UPDATE accounts SET balance = ? WHERE client_id = ?";
         final int recordsUpdated;
         boolean updateSuccessful = false;
 

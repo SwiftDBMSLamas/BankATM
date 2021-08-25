@@ -1,7 +1,8 @@
 package com.allan.amca.gui;
 
+import com.allan.amca.gui.login.LoginResources;
+
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Screen base class
@@ -10,20 +11,12 @@ import java.awt.*;
 public abstract class Screen extends JFrame implements Frameable {
 
     public JFrame                       frame;
-    private JPanel                      cardPane;
-    private JMenuBar                    menuBar;
-    private JMenu                       fileMenu;
-    private JMenu                       editMenu;
-    public static final int             SEND_CLIENT_REQUEST = 1;
     public static final int             GET_CLIENT_REQUEST = 1;
-    private CardLayout                  cardLayout;
-    protected final ScreenResources     resource = new ScreenResources();
+    protected final LoginResources     resource = new LoginResources();
     //initializer to grab the values and loads the properties file.
     {
-        resource.getValues();
-        frame       = new JFrame("ATM - Login");
-        cardPane    = new JPanel();
-        cardLayout  = new CardLayout();
+        resource.getPropertyValues();
+        frame       = new JFrame(resource.LOGIN_FRAME_TXT());
         addMenuBar();
     }
 
@@ -47,18 +40,10 @@ public abstract class Screen extends JFrame implements Frameable {
      */
     protected abstract void updateUI();
 
-    public JPanel getCardPane() {
-        return cardPane;
-    }
-
-    public CardLayout getCardLayout() {
-        return cardLayout;
-    }
-
     private void addMenuBar() {
-        menuBar = new JMenuBar();
-        fileMenu = new JMenu("File");
-        editMenu = new JMenu("Edit");
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenu editMenu = new JMenu("Edit");
 
         frame.setJMenuBar(menuBar);
         menuBar.add(fileMenu);

@@ -77,7 +77,7 @@ public class AccountBalanceUI extends Screen implements Frameable {
 
         printBalanceBtn.addActionListener( event -> {
             // show dialog with current balance
-            Dao<Client, Long> accountDao =  DaoFactory.createDao(DaoType.ACCOUNT);
+            Dao<Client, Long> accountDao = DaoFactory.createDao(DaoType.ACCOUNT);
             BigDecimal balance = accountDao.retrieve(client.getClientID());
             JOptionPane.showMessageDialog(
                     frame,

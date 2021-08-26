@@ -3,7 +3,9 @@ package com.allan.amca.data;
 import java.sql.*;
 
 public final class DatabaseHelper {
+
 //TODO: create password table.. move pin/salt and make client_id the primary/foreign key
+
     private static final String DATABASE_NAME = "Bank";
 
     private static final String TABLE_CLIENTS = "clients";

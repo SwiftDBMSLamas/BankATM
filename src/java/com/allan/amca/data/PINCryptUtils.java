@@ -103,6 +103,7 @@ public class PINCryptUtils {
         try (Connection connection = DriverManager.getConnection(URI, DB_USER, DB_PW)) {
             try (PreparedStatement updatePinStmt = connection.prepareStatement(UPDATE_PIN_SALT_QUERY)) {
                 connection.setAutoCommit(false);
+
                 updatePinStmt.setString(ENCRYPTED_PIN_PARAM, securePin);
                 updatePinStmt.setString(SALT_PARAM, salt);
                 updatePinStmt.setLong(CLIENT_ID_PARAM, UserDaoImpl.getNewClientIDFromDB());

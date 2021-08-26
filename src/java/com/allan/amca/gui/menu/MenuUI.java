@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public final class MenuUI extends Screen implements Frameable {
+
     private JLabel              transactionMenuWelcomeLabel;
     private JButton             balanceTransactionButton;
     private JButton             withdrawalTransactionButton;

@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
-public class UserDaoImpl extends DaoAbstract<Client, Long> {
+@SuppressWarnings("ALL")
+public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
 //    Resources
     private static final String DB_URI          = DataResources.getDBUri();
     private static final String DB_USER         = DataResources.getDBUsername();

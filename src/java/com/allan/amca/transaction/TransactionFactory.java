@@ -8,13 +8,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 /**
- * Factory class to create transactions
+ * Factory class to create transactions. I used a HashMap for this one to give the implementation a try!
+ * The HashMap will allow for faster lookup and performance... I guess?
  * @author allanaranzaso
  * @version 1.0
  */
 public class TransactionFactory {
 
-    protected static HashMap<TransactionType, Transaction> transactionMap;
+    protected static final HashMap<TransactionType, Transaction> transactionMap;
     private static final int TRANSACTION_MONTH  = Calendar.getInstance().get(Calendar.MONTH);
     private static final int TRANSACTION_DAY    = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     private static final int TRANSACTION_YEAR   = Calendar.getInstance().get(Calendar.YEAR);
@@ -48,8 +49,7 @@ public class TransactionFactory {
      */
     @Contract(pure = true)
     private static @NotNull String formatTime() {
-        final String date = TRANSACTION_YEAR + "-" + TRANSACTION_MONTH + "-" + TRANSACTION_DAY + " " +
+        return TRANSACTION_YEAR + "-" + TRANSACTION_MONTH + "-" + TRANSACTION_DAY + " " +
                 TRANSACTION_HOUR + ":" + TRANSACTION_MIN + ":" + TRANSACTION_SEC;
-        return date;
     }
 }

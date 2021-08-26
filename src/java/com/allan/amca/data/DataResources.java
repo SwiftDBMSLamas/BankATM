@@ -3,6 +3,11 @@ package com.allan.amca.data;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Class to retrieve the database information from the properties file. If you are having issues connecting to the
+ * database. Please open the res_en.properties file and make sure the database URI, user, password are correct for your
+ * specific configuration.
+ */
 public final class DataResources {
 
     private static final String URI;
@@ -16,7 +21,7 @@ public final class DataResources {
         DB_USER = bundle.getString("db.user");
         PASSWORD = bundle.getString("db.pw");
     }
-
+    // prevent from allowing any other classes to instantiate this class
     private DataResources(){}
 
     public static String getDBUsername() {

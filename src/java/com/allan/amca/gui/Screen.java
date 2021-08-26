@@ -10,7 +10,7 @@ import javax.swing.*;
  */
 public abstract class Screen extends JFrame implements Frameable {
 
-    public JFrame                       frame;
+    public final JFrame                       frame;
     public static final int             GET_CLIENT_REQUEST = 1;
     protected final LoginResources     resource = new LoginResources();
     //initializer to grab the values and loads the properties file.

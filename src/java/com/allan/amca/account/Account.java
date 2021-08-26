@@ -1,8 +1,14 @@
 package com.allan.amca.account;
 
+import com.allan.amca.user.Client;
+
 import java.math.BigDecimal;
 
-public class Account extends AccountDaoImpl {
+/**
+ * This class is not currently used in the application. Will keep around if needed.
+ *
+ */
+public class Account extends AccountDaoImpl<Client, BigDecimal> {
 
     private BigDecimal accountBalance;
     private static final double INVALID_AMT = 0;

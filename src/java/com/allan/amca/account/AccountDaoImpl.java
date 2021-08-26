@@ -7,7 +7,12 @@ import com.allan.amca.user.Client;
 import java.math.BigDecimal;
 import java.sql.*;
 
-public class AccountDaoImpl extends DaoAbstract<Client, Long> {
+/**
+ * Implements the data access object pattern.
+ * @author allanaranzaso
+ */
+@SuppressWarnings("unchecked")
+public class AccountDaoImpl<T, N> extends DaoAbstract<Client, Long> {
     private static final String DB_URI              = DataResources.getDBUri();
     private static final String DB_USER             = DataResources.getDBUsername();
     private static final String DB_PASSWORD         = DataResources.getDBPassword();

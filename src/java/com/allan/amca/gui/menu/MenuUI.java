@@ -9,7 +9,7 @@ import com.allan.amca.user.Client;
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuUI extends Screen implements Frameable {
+public final class MenuUI extends Screen implements Frameable {
     private JLabel              transactionMenuWelcomeLabel;
     private JButton             balanceTransactionButton;
     private JButton             withdrawalTransactionButton;
@@ -19,7 +19,6 @@ public class MenuUI extends Screen implements Frameable {
     private GridBagConstraints  constraints;
     private final JPanel        parentPane;
     private final CardLayout    parentCardLayout;
-    private Client        client;
     private final MenuResources r = new MenuResources();
 
     {
@@ -114,7 +113,7 @@ public class MenuUI extends Screen implements Frameable {
 
     @Override
     public void initComponents() {
-        client                          = Client.getClient(GET_CLIENT_REQUEST);
+        Client client = Client.getClient(GET_CLIENT_REQUEST);
         transactionMenuWelcomeLabel     = new JLabel(String.format(
                                                         r.SELECTION_WELCOME_TXT(),
                                                         client.getFirstName(),

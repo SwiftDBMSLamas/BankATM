@@ -70,7 +70,7 @@ To run the application on your machine:
 3. Run the Driver.java file - upon start, the application will create the tables necessary to run the application
 4. When the application runs, register an account first by clicking the `Create Account` button so that you can log in and play around with the UI
 
-The UI is very simple as this was my first time using Java's Swing library. There's no fancy transitions or animations as that wasn't the intention of this project.
+The UI is very simple as this was my first time using Java's Swing library. There's no fancy transitions or animations as that was not the intention of this project.
 
 
 You will need to "register" for an account by clicking the `Create Account` button and filling out the form. 

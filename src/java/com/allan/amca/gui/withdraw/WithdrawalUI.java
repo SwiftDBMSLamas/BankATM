@@ -25,7 +25,7 @@ public class WithdrawalUI extends Screen implements Frameable {
     private final JPanel        parentPane;
     private final CardLayout    parentCardLayout;
     private final Client        client;
-    private WithdrawalResources r = new WithdrawalResources();
+    private final WithdrawalResources r = new WithdrawalResources();
 
     {
         client = Client.getClient(GET_CLIENT_REQUEST);
@@ -101,8 +101,8 @@ public class WithdrawalUI extends Screen implements Frameable {
                                     r.WITHDRAW_ERROR_TITLE(),
                                     JOptionPane.WARNING_MESSAGE);
                         }
-                        for (int i = 0; i < transactionSuccess.length; i++) {
-                            if (transactionSuccess[i]) {
+                        for (boolean success : transactionSuccess) {
+                            if (success) {
                                 dialog.dispose();
                                 JOptionPane.showMessageDialog(frame,
                                         r.WITHDRAW_SUCCESS_MSG());

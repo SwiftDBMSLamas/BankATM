@@ -12,7 +12,7 @@ import java.sql.*;
  * @author allanaranzaso
  * @version 1.0
  */
-public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
+public class TransactionDaoImpl<T, N> extends DaoAbstract<Transaction, Long> {
     private static final String URI          = DataResources.getDBUri();
     private static final String DB_USER      = DataResources.getDBUsername();
     private static final String DB_PW        = DataResources.getDBPassword();
@@ -92,6 +92,7 @@ public class TransactionDaoImpl extends DaoAbstract<Transaction, Long> {
      * @param toRetrieve the transaction id to retrieve
      * @return transaction object with information on the transaction
      */
+    @SuppressWarnings("unchecked")
     @Override
     protected Transaction readRecord(Long toRetrieve) {
         final String QUERY = "SELECT transaction_id, transaction_type, transaction_date, transaction_amount " +

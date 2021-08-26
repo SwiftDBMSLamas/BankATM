@@ -1,13 +1,12 @@
 package com.allan.amca.gui.register;
 
 import com.allan.amca.gui.Frameable;
-import com.allan.amca.gui.menu.MenuUI;
 import com.allan.amca.gui.Screen;
+import com.allan.amca.gui.menu.MenuUI;
 import com.allan.amca.register.Register;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
 
 public class RegisterUI extends Screen implements Frameable {
     private JLabel              registerHeaderLabel;
@@ -94,6 +93,7 @@ public class RegisterUI extends Screen implements Frameable {
 
             try {
                 registerSuccessful = register.register(firstName, lastName, pin);
+                // Print out the new client's ID number to be used when they log in, so they don't forget
                 if (registerSuccessful) {
                     JOptionPane.showMessageDialog(frame,
                             r.REGISTER_SUCCESS_MSG(),
@@ -101,7 +101,7 @@ public class RegisterUI extends Screen implements Frameable {
                     final MenuUI menuUI = new MenuUI(parentCardLayout, parentPane);
                     menuUI.createUI();
                 }
-            } catch (SQLException | IllegalArgumentException ex) {
+            } catch (IllegalArgumentException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(frame,
                         r.REGISTER_ERROR_MSG(),
@@ -109,7 +109,7 @@ public class RegisterUI extends Screen implements Frameable {
             }
         });
 
-        backBtn.addActionListener( evt -> parentCardLayout.show(parentPane, resource.LOGIN_PANEL()));
+        backBtn.addActionListener(evt -> parentCardLayout.show(parentPane, resource.LOGIN_PANEL()));
     }
 
     @Override

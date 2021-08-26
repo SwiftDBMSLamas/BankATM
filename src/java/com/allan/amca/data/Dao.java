@@ -1,9 +1,8 @@
 package com.allan.amca.data;
 
-import java.sql.SQLException;
-// TODO: next iteration, create REST API to communicate between database and the program logic
 /**
- * Interface to override and for providing flexibility
+ * Interface to override. The data access object pattern will require the implementation of the methods below in the
+ * base class DaoAbstract. The base class will then use the template method to leave the implementation up to the subclasses
  * @param <T> the type of object to create a Generic type for.
  *           In the case of this project, will either be a Client or Transaction object
  * @param <N> the type of number to create a Generic type for.
@@ -13,11 +12,11 @@ import java.sql.SQLException;
  */
 public interface Dao<T, N>{
 
-    boolean create(T toCreate) throws SQLException;
-    boolean update(T toUpdate, N id) throws SQLException;
-    boolean delete(T toDelete) throws SQLException;
-    default T retrieve(){return null;};
-    default <T> T retrieve(N toRetrieve){return null;};
+    boolean create(T toCreate);
+    boolean update(T toUpdate, N id);
+    boolean delete(T toDelete);
+
+    <T> T retrieve(N toRetrieve);
 
 
 }

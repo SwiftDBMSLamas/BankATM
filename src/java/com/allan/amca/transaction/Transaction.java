@@ -25,7 +25,6 @@ public abstract class Transaction
     private static final String DB_USER                     = DataResources.getDBUsername();
     private static final String DB_PASS                     = DataResources.getDBPassword();
     private static final int    NEG_VALUE                   = 0;
-    private String              transactionType;
     private int                 transactionID;
     private String              transactionDate;
     private BigDecimal          transactionAmount;
@@ -105,7 +104,6 @@ public abstract class Transaction
         if (type.isBlank()) {
             throw new IllegalArgumentException("Transaction type is invalid: " + type);
         }
-        this.transactionType = type;
     }
 
     /**

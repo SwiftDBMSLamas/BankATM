@@ -13,6 +13,7 @@ public final class DataResources {
     private static final String URI;
     private static final String DB_USER;
     private static final String PASSWORD;
+    private static final String NEW_DB_URI;
 
     static {
         Locale locale = new Locale("en");
@@ -20,6 +21,7 @@ public final class DataResources {
         URI = bundle.getString("db.url");
         DB_USER = bundle.getString("db.user");
         PASSWORD = bundle.getString("db.pw");
+        NEW_DB_URI = bundle.getString("createDB.url");
     }
     // prevent from allowing any other classes to instantiate this class
     private DataResources(){}
@@ -35,6 +37,8 @@ public final class DataResources {
     public static String getDBUri() {
         return URI;
     }
-
+    public static String getNewDbUri() {
+        return NEW_DB_URI;
+    }
 
 }

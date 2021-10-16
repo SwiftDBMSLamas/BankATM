@@ -1,4 +1,4 @@
-package com.allan.amca.gui.withdraw;
+package com.allan.amca.gui.deposit;
 
 import com.allan.amca.enums.TransactionType;
 import com.allan.amca.gui.Frameable;
@@ -12,27 +12,26 @@ import java.awt.*;
 import java.math.BigDecimal;
 
 /**
- * Withdrawal subclass UI
+ * Deposit subclass UI
  * @author allanaranzaso
  */
-public class WithdrawalUI extends Screen implements Frameable {
-    private JLabel              headWithdrawLabel;
-    private JTextField          withdrawTxtField;
-    private JButton             withdrawBtn;
-    private JButton             returnBtn;
-    private JPanel              withdrawPanel;
-    private GridBagConstraints  constraints;
-    private final JPanel        parentPane;
-    private final CardLayout    parentCardLayout;
-    private final Client        client;
-    private final WithdrawalResources r = new WithdrawalResources();
+public class DepositView extends Screen implements Frameable {
+    private JLabel headDepositLabel;
+    private JTextField depositTxtField;
+    private JButton depositBtn;
+    private JButton returnBtn;
+    private JPanel depositPanel;
+    private GridBagConstraints constraints;
+    private final JPanel parentPane;
+    private final CardLayout parentCardLayout;
+    private final DepositResources r = new DepositResources();
+    private final Client client = Client.getClient(1);
 
     {
-        client = Client.getClient(GET_CLIENT_REQUEST);
         r.getPropertyValues();
     }
 
-    public WithdrawalUI(final CardLayout layout, final JPanel pane) {
+    public DepositView(final CardLayout layout, final JPanel pane) {
         this.parentCardLayout = layout;
         this.parentPane = pane;
     }
@@ -40,44 +39,43 @@ public class WithdrawalUI extends Screen implements Frameable {
     @Override
     protected void updateUI() {
         // Header Label
-        constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        withdrawPanel.add(headWithdrawLabel, constraints);
+        depositPanel.add(headDepositLabel, constraints);
 
-        // Withdraw Input Field
+        // Deposit Field
         constraints.gridy = 1;
-        withdrawPanel.add(withdrawTxtField, constraints);
+        depositPanel.add(depositTxtField, constraints);
 
         // Deposit Btn
         constraints.gridy = 2;
-        withdrawPanel.add(withdrawBtn, constraints);
+        depositPanel.add(depositBtn, constraints);
 
         // Cancel Btn
         constraints.gridy = 3;
-        withdrawPanel.add(returnBtn, constraints);
+        depositPanel.add(returnBtn, constraints);
 
-        parentPane.add(withdrawPanel, r.WITHDRAW_PANEL());
-        parentCardLayout.show(parentPane, r.WITHDRAW_PANEL());
+        parentPane.add(depositPanel, r.DEPOSIT_PANEL());
+        parentCardLayout.show(parentPane, r.DEPOSIT_PANEL());
         frame.repaint();
     }
 
     @Override
     public void addListeners() {
         returnBtn.addActionListener(event -> parentCardLayout.show(parentPane, r.SELECTION_PANEL()));
+        depositBtn.addActionListener( event -> {
 
-        withdrawBtn.addActionListener( event -> {
             final boolean[] transactionSuccess      = new boolean[1];
-            final int transactionTrue               = 0;
-            final BigDecimal withdrawalAmt          = BigDecimal.valueOf( Double.parseDouble(withdrawTxtField.getText() ) );
-            final Transaction withdrawalTransaction = TransactionFactory.createTransaction(TransactionType.WITHDRAWAL);
-            final JDialog dialog                    = new JDialog(frame, r.WITHDRAW_DIALOG_TITLE(), true);
-            final JOptionPane confirmPane           = new JOptionPane(String.format(r.WITHDRAW_DIALOG_TXT(), withdrawalAmt),
+            final BigDecimal depositAmt             = BigDecimal.valueOf( Double.parseDouble( depositTxtField.getText() ) );
+            final Transaction depositTransaction    = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
+            final JDialog dialog                    = new JDialog(frame, r.DEPOSIT_DIALOG_TITLE(), true);
+            final JOptionPane confirmPane           = new JOptionPane(String.format(r.DEPOSIT_DIALOG_TEXT(), depositAmt),
                                                         JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_NO_OPTION);
 
             dialog.setLocationRelativeTo(null);
             dialog.setContentPane(confirmPane);
-            // add listener for user selecting yes/no
+
+            // adds listener for user selecting yes/no
             confirmPane.addPropertyChangeListener( listener -> {
                 String prop = listener.getPropertyName();
 
@@ -90,28 +88,27 @@ public class WithdrawalUI extends Screen implements Frameable {
                     if (value == JOptionPane.YES_OPTION) {
                         // if success, show the success pane
                         try {
-                            transactionSuccess[transactionTrue] = withdrawalTransaction
-                                                    .performTransaction(client.getClientID(), withdrawalAmt);
+                            transactionSuccess[0] = depositTransaction.performTransaction(client.getClientID(), depositAmt);
                         } catch (IllegalArgumentException ex) {
+                            depositTxtField.setText(null);
                             dialog.dispose();
-                            withdrawTxtField.setText(null);
                             JOptionPane.showMessageDialog(
                                     frame,
-                                    r.WITHDRAW_INSUFFICIENT_ERROR(),
-                                    r.WITHDRAW_ERROR_TITLE(),
+                                    r.DEPOSIT_ERROR_TXT(),
+                                    r.DEPOSIT_ERROR_TITLE(),
                                     JOptionPane.WARNING_MESSAGE);
                         }
                         for (boolean success : transactionSuccess) {
                             if (success) {
                                 dialog.dispose();
                                 JOptionPane.showMessageDialog(frame,
-                                        r.WITHDRAW_SUCCESS_MSG());
+                                        r.DEPOSIT_SUCCESS_MSG());
                                 setLocationRelativeTo(null);
                                 parentCardLayout.show(parentPane, r.SELECTION_PANEL());
                             }
                         }
                     } else if (value == JOptionPane.NO_OPTION) {
-                        withdrawTxtField.setText(null);
+                        depositTxtField.setText(null);
                         dialog.setVisible(false);
                     }
                 }
@@ -123,11 +120,11 @@ public class WithdrawalUI extends Screen implements Frameable {
 
     @Override
     public void initComponents() {
-        headWithdrawLabel    = new JLabel(r.WITHDRAW_HEADER_TXT());
-        withdrawTxtField     = new JTextField(10);
-        withdrawBtn          = new JButton(r.WITHDRAW_BTN());
-        returnBtn            = new JButton(r.WITHDRAW_RETURN_BTN());
-        withdrawPanel        = new JPanel(new GridBagLayout());
-        constraints          = new GridBagConstraints();
+        headDepositLabel    = new JLabel(r.DEPOSIT_HEADER_TXT());
+        depositTxtField     = new JTextField(10);
+        depositBtn          = new JButton(r.DEPOSIT_BTN());
+        returnBtn           = new JButton(r.DEPOSIT_RETURN_BTN());
+        depositPanel        = new JPanel(new GridBagLayout());
+        constraints         = new GridBagConstraints();
     }
 }

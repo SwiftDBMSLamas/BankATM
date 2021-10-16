@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PersonTest {
 
-    protected void test(final Client  client,
-                        final int     request) {
+    protected void testClientMap(final Client  client,
+                                 final int     request) {
         assertThat(Client.sendClient(request, client), equalTo(Client.getClient(request)));
     }
 
@@ -22,11 +22,6 @@ class PersonTest {
     protected void getLastName(final Client client,
                                final String expectedLastName) {
         assertThat(client.getLastName(), equalTo(expectedLastName));
-    }
-
-    protected void getPin(final Client client,
-                          final String expectedPin) {
-        assertThat(client.getPIN(), equalTo(expectedPin));
     }
 
     protected void getClientIDFromDB(final Client client,
@@ -61,10 +56,9 @@ class PersonTest {
 
     protected void badClientConstructor(final String                      firstName,
                                         final String                      lastName,
-                                        final String                      pin,
                                         final Class<? extends Exception>  expectedException,
                                         final String                      expectedMessage) {
 
-        badConstructor(() -> new Client(firstName, lastName, pin), expectedException, expectedMessage);
+        badConstructor(() -> new Client(firstName, lastName), expectedException, expectedMessage);
     }
 }

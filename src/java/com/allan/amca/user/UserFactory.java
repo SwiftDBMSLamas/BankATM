@@ -9,10 +9,9 @@ public final class UserFactory {
     /**
      * @param firstName the user's first name. Cannot be null or empty.
      * @param lastName the user's last name. Cannot be null or empty.
-     * @param pin the user's password. Cannot be null or empty.
      * @return the client
      */
-    public static Client createUser(String firstName, String lastName, String pin) {
-        return new Client(firstName, lastName, pin);
+    public static Client createUser(String firstName, String lastName) {
+        return new Client(firstName, lastName);
     }
 }

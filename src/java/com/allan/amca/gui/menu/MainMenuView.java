@@ -1,15 +1,15 @@
 package com.allan.amca.gui.menu;
 
 import com.allan.amca.gui.*;
-import com.allan.amca.gui.balance.AccountBalanceUI;
-import com.allan.amca.gui.deposit.DepositUI;
-import com.allan.amca.gui.withdraw.WithdrawalUI;
+import com.allan.amca.gui.balance.AccountBalanceView;
+import com.allan.amca.gui.deposit.DepositView;
+import com.allan.amca.gui.withdraw.WithdrawalView;
 import com.allan.amca.user.Client;
 
 import javax.swing.*;
 import java.awt.*;
 
-public final class MenuUI extends Screen implements Frameable {
+public final class MainMenuView extends Screen implements Frameable {
 
     private JLabel              transactionMenuWelcomeLabel;
     private JButton             balanceTransactionButton;
@@ -26,7 +26,7 @@ public final class MenuUI extends Screen implements Frameable {
         r.getPropertyValues();
     }
 
-    public MenuUI(final CardLayout layout, final JPanel pane) {
+    public MainMenuView(final CardLayout layout, final JPanel pane) {
         super();
         this.parentCardLayout = layout;
         this.parentPane = pane;
@@ -65,19 +65,19 @@ public final class MenuUI extends Screen implements Frameable {
     @Override
     public void addListeners() {
         balanceTransactionButton.addActionListener( event -> {
-            final AccountBalanceUI screen = new AccountBalanceUI(parentCardLayout, parentPane);
+            final AccountBalanceView screen = new AccountBalanceView(parentCardLayout, parentPane);
             screen.createUI();
             frame.setTitle(r.BALANCE_FRAME_TITLE());
         });
 
         withdrawalTransactionButton.addActionListener( event -> {
-            final WithdrawalUI screen = new WithdrawalUI(parentCardLayout, parentPane);
+            final WithdrawalView screen = new WithdrawalView(parentCardLayout, parentPane);
             screen.createUI();
             frame.setTitle(r.WITHDRAW_FRAME_TITLE());
         });
 
         depositTransactionButton.addActionListener( event -> {
-            final DepositUI screen = new DepositUI(parentCardLayout, parentPane);
+            final DepositView screen = new DepositView(parentCardLayout, parentPane);
             screen.createUI();
             frame.setTitle(r.DEPOSIT_FRAME_TITLE());
         });

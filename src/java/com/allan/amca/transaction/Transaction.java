@@ -7,10 +7,8 @@ import com.allan.amca.enums.DaoType;
 import com.allan.amca.user.Client;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.HashMap;
 
 /**
  * Transaction base class
@@ -184,4 +182,36 @@ public abstract class Transaction
      * @return the sum after the calculation has been performed.
      */
     protected abstract BigDecimal calculate(BigDecimal currentBalance, BigDecimal amount);
+
+    public void recordsRetrieved(final Long accountID) {
+        HashMap<Integer, Transaction> transactionHashMap = new HashMap<>();
+        final ResultSet rs;
+        Transaction retrievedTransaction = null;
+        final String QUERY  = "SELECT transaction_id, transaction_type, transaction_date, transaction_amount" +
+                " FROM transactions WHERE client_id = ?;";
+
+        try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_URI)) {
+            try (PreparedStatement retrieveTransactions = connection.prepareStatement(QUERY)) {
+                retrieveTransactions.setLong(1, accountID);
+
+                rs = retrieveTransactions.executeQuery();
+                if (rs.next()) {
+                    final String type = rs.getString(2);
+                    switch(type) {
+                        case "withdraw" -> retrievedTransaction  = new Withdrawal(rs.getString(3));
+                        case "deposit"  -> retrievedTransaction  = new Deposit(rs.getString(3));
+                        default         -> throw new IllegalArgumentException("Type is invalid");
+                    }
+                    retrievedTransaction.setTransactionID(rs.getInt(1));
+                    retrievedTransaction.setTransactionType(rs.getString(2));
+                    retrievedTransaction.setTransactionDate(rs.getString(3));
+                    retrievedTransaction.setTransactionAmount(rs.getBigDecimal(4));
+                    transactionHashMap.put(retrievedTransaction.getTransactionID(), retrievedTransaction);
+                    System.out.println(transactionHashMap.entrySet());
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -8,5 +8,4 @@ public interface Person {
     long getClientID();
     String getFirstName();
     String getLastName();
-    String getPIN();
 }

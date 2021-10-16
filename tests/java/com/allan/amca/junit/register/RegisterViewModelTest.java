@@ -2,7 +2,7 @@ package com.allan.amca.junit.register;
 
 import org.junit.jupiter.api.Test;
 
-public class RegisterTest extends RegisterTests {
+public class RegisterViewModelTest extends RegisterTests {
 
     @Test
     void register() {
@@ -31,8 +31,8 @@ public class RegisterTest extends RegisterTests {
         invalidRegister(null, null, "1111",
                 IllegalArgumentException.class, "First name cannot be empty");
         invalidRegister(null, "Doe", null,
-                IllegalArgumentException.class, "First name cannot be empty");
+                IllegalArgumentException.class, "PIN must be minimum 4 digits or more");
         invalidRegister("John", null, null,
-                IllegalArgumentException.class, "Last name cannot be empty");
+                IllegalArgumentException.class, "PIN must be minimum 4 digits or more");
     }
 }

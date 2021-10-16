@@ -1,12 +1,12 @@
 package com.allan.amca.gui;
 
 import com.allan.amca.enums.ScreenType;
-import com.allan.amca.gui.balance.AccountBalanceUI;
-import com.allan.amca.gui.deposit.DepositUI;
-import com.allan.amca.gui.login.LoginUI;
-import com.allan.amca.gui.menu.MenuUI;
-import com.allan.amca.gui.register.RegisterUI;
-import com.allan.amca.gui.withdraw.WithdrawalUI;
+import com.allan.amca.gui.balance.AccountBalanceView;
+import com.allan.amca.gui.deposit.DepositView;
+import com.allan.amca.gui.login.LoginView;
+import com.allan.amca.gui.menu.MainMenuView;
+import com.allan.amca.gui.register.RegisterView;
+import com.allan.amca.gui.withdraw.WithdrawalView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,22 +15,22 @@ import java.util.HashMap;
 public class ScreenFactory {
 
     private static final HashMap<ScreenType, Screen> screenMap;
-    private static final LoginUI screen;
+    private static final LoginView screen;
     private static final JPanel     cardPane;
     private static final CardLayout cardLayout;
 
     static {
-        screen = new LoginUI();
+        screen = new LoginView();
         cardPane = screen.getCardPanel();
         cardLayout = screen.getCardLayout();
 
         screenMap = new HashMap<>();
-        screenMap.put(ScreenType.LOGIN, new LoginUI());
-        screenMap.put(ScreenType.REGISTER, new RegisterUI(cardLayout, cardPane));
-        screenMap.put(ScreenType.SELECTION_MENU, new MenuUI(cardLayout, cardPane));
-        screenMap.put(ScreenType.DEPOSIT, new DepositUI(cardLayout, cardPane));
-        screenMap.put(ScreenType.WITHDRAWAL, new WithdrawalUI(cardLayout, cardPane));
-        screenMap.put(ScreenType.ACCOUNT_BALANCE, new AccountBalanceUI(cardLayout, cardPane));
+        screenMap.put(ScreenType.LOGIN, new LoginView());
+        screenMap.put(ScreenType.REGISTER, new RegisterView(cardLayout, cardPane));
+        screenMap.put(ScreenType.SELECTION_MENU, new MainMenuView(cardLayout, cardPane));
+        screenMap.put(ScreenType.DEPOSIT, new DepositView(cardLayout, cardPane));
+        screenMap.put(ScreenType.WITHDRAWAL, new WithdrawalView(cardLayout, cardPane));
+        screenMap.put(ScreenType.ACCOUNT_BALANCE, new AccountBalanceView(cardLayout, cardPane));
     }
 
     public static Screen createScreen(ScreenType type) {

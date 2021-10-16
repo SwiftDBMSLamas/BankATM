@@ -2,13 +2,15 @@ package com.allan.amca.gui.register;
 
 import com.allan.amca.gui.Frameable;
 import com.allan.amca.gui.Screen;
-import com.allan.amca.gui.menu.MenuUI;
-import com.allan.amca.register.Register;
+import com.allan.amca.gui.menu.MainMenuView;
+import com.allan.amca.register.RegisterViewModel;
+import com.allan.amca.user.Client;
+
 
 import javax.swing.*;
 import java.awt.*;
 
-public class RegisterUI extends Screen implements Frameable {
+public class RegisterView extends Screen implements Frameable {
     private JLabel              registerHeaderLabel;
     private JLabel              firstNameLabel;
     private JLabel              lastNameLabel;
@@ -28,14 +30,14 @@ public class RegisterUI extends Screen implements Frameable {
         r.getPropertyValues();
     }
 
-    public RegisterUI(final CardLayout layout, final JPanel pane) {
+    public RegisterView(final CardLayout layout, final JPanel pane) {
         this.parentCardLayout   = layout;
         this.parentPane         = pane;
     }
 
     @Override
     protected void updateUI() {
-        // Register label
+        // RegisterViewModel label
         constraints.gridx = 1;
         constraints.gridy = 0;
         registerPanel.add(registerHeaderLabel, constraints);
@@ -87,18 +89,20 @@ public class RegisterUI extends Screen implements Frameable {
         confirmRegBtn.addActionListener( evt -> {
             final String firstName = firstNameTextField.getText();
             final String lastName  = lastNameTextField.getText();
-            final String pin       = String.valueOf( pinField.getPassword() );
-            final Register register = Register.newInstance();
+            final String pin       = String.valueOf(pinField.getPassword());
+            final RegisterViewModel registerViewModel = RegisterViewModel.newInstance();
             final boolean registerSuccessful;
 
             try {
-                registerSuccessful = register.register(firstName, lastName, pin);
-                // Print out the new client's ID number to be used when they log in, so they don't forget
+
+                registerSuccessful = registerViewModel.register(firstName, lastName, pin);
+
                 if (registerSuccessful) {
+                    final Client newClient = Client.getClient(1);
                     JOptionPane.showMessageDialog(frame,
-                            r.REGISTER_SUCCESS_MSG(),
+                            String.format(r.REGISTER_SUCCESS_MSG(), newClient.getClientID()),
                             r.REGISTER_SUCCESS_TITLE(), JOptionPane.INFORMATION_MESSAGE);
-                    final MenuUI menuUI = new MenuUI(parentCardLayout, parentPane);
+                    final MainMenuView menuUI = new MainMenuView(parentCardLayout, parentPane);
                     menuUI.createUI();
                 }
             } catch (IllegalArgumentException ex) {

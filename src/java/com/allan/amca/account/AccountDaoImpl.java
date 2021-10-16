@@ -2,10 +2,14 @@ package com.allan.amca.account;
 
 import com.allan.amca.data.DaoAbstract;
 import com.allan.amca.data.DataResources;
+import com.allan.amca.transaction.Deposit;
+import com.allan.amca.transaction.Transaction;
+import com.allan.amca.transaction.Withdrawal;
 import com.allan.amca.user.Client;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.HashMap;
 
 /**
  * Implements the data access object pattern.
@@ -24,9 +28,10 @@ public class AccountDaoImpl<T, N> extends DaoAbstract<Client, Long> {
      * @return the client's account balance
      */
     @Override
-    protected BigDecimal readRecord(final Long accountID) {
+    protected N readRecord(final Long accountID) {
         final int ACCOUNT_ID_PARAM  = 1;
         final String QUERY          = "SELECT balance FROM accounts WHERE client_id = ?;";
+        final String Q = "SELECT balance FROM accounts WHERE client_id = ?;";
         final int    BALANCE_COL    = 1;
         ResultSet rs;
         BigDecimal retrievedBalance = BigDecimal.valueOf(0.0);
@@ -45,7 +50,41 @@ public class AccountDaoImpl<T, N> extends DaoAbstract<Client, Long> {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return retrievedBalance;
+        return (N) retrievedBalance;
+    }
+
+
+
+    public void recordsRetrieved(final Long accountID) {
+        HashMap<Integer, Transaction> transactionHashMap = new HashMap<>();
+        final ResultSet rs;
+        Transaction retrievedTransaction = null;
+        final String QUERY  = "SELECT transaction_id, transaction_type, transaction_date, transaction_amount" +
+                " FROM transactions WHERE client_id = ? LIMIT 5;";
+
+        try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PASSWORD)) {
+            try (PreparedStatement retrieveTransactions = connection.prepareStatement(QUERY)) {
+                retrieveTransactions.setLong(1, accountID);
+                connection.setAutoCommit(false);
+                rs = retrieveTransactions.executeQuery();
+                while (rs.next()) {
+                    final String type = rs.getString(2);
+                    switch(type) {
+                        case "withdrawal" -> retrievedTransaction  = new Withdrawal(rs.getString(3));
+                        case "deposit"  -> retrievedTransaction  = new Deposit(rs.getString(3));
+                        default         -> throw new IllegalArgumentException("Type is invalid: " + type);
+                    }
+                    retrievedTransaction.setTransactionID(rs.getInt(1));
+                    retrievedTransaction.setTransactionType(rs.getString(2));
+                    retrievedTransaction.setTransactionDate(rs.getString(3));
+                    retrievedTransaction.setTransactionAmount(rs.getBigDecimal(4));
+                    transactionHashMap.put(retrievedTransaction.getTransactionID(), retrievedTransaction);
+                    System.out.println("Transaction: " + transactionHashMap.get(retrievedTransaction.getTransactionID()));
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**

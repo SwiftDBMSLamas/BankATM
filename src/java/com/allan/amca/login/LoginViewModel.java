@@ -6,17 +6,17 @@ import com.allan.amca.data.PINCryptUtils;
 import java.sql.*;
 
 /**
- * Login class that has one method to verify the login of the user.
+ * LoginViewModel class that has one method to verify the login of the user.
  * @author allanaranzaso
  */
-public class Login {
+public class LoginViewModel {
 
-    private static final Login instance = new Login();
+    private static final LoginViewModel instance = new LoginViewModel();
     private static final int CLIENT_ID_PARAM = 1;
     private static final int ENCRYPT_PIN_PARAM = 1;
     private static final int SALT_PARAM = 2;
 
-    private Login() {}
+    private LoginViewModel() {}
 
     /**
      * Validates the credentials of the user by taking their client ID and PIN and comparing it to what's stored in the database
@@ -28,7 +28,7 @@ public class Login {
         final String URI            = DataResources.getDBUri();
         final String DB_USER        = DataResources.getDBUsername();
         final String DB_PW          = DataResources.getDBPassword();
-        final String LOGIN_QUERY    = "SELECT pin, salt FROM clients WHERE client_id = ?;";
+        final String LOGIN_QUERY    = "SELECT pin, salt FROM pins WHERE client_id = ?;";
         final ResultSet result;
         boolean loginValid = false;
 
@@ -49,7 +49,7 @@ public class Login {
     }
 
 //    Singleton access
-    public static Login getInstance() {
+    public static LoginViewModel getInstance() {
         return instance;
     }
 }

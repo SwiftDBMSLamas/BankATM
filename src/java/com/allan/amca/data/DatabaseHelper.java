@@ -12,7 +12,6 @@ public final class DatabaseHelper {
     private static final String COLUMN_CLIENT_ID = "client_id";
     private static final String COLUMN_CLIENT_FIRSTNAME = "first_name";
     private static final String COLUMN_CLIENT_LASTNAME = "last_name";
-    private static final String COLUMN_CLIENT_PIN = "pin";
 
     private static final String TABLE_ACCOUNTS = "accounts";
     private static final String COLUMN_ACCOUNT_CLIENT_ID = "client_id";
@@ -27,16 +26,20 @@ public final class DatabaseHelper {
     private static final String COLUMN_TRANSACTIONS_CLIENT_ID = "client_id";
 
     private static final String DB_URI = DataResources.getDBUri();
+    private static final String NEW_DB_URI = DataResources.getNewDbUri();
     private static final String DB_USER = DataResources.getDBUsername();
     private static final String DB_PW = DataResources.getDBPassword();
+    private static final String TABLE_PW = "pins";
+    private static final String COLUMN_SALT_VAL = "salt";
+    private static final String COLUMN_PIN = "pin";
 
     /**
      *  Creates database on start if it doesn't already exist
      */
     public static void createDatabase() {
-        final String CREATE_CLIENT_DB            = "CREATE DATABASE " + DATABASE_NAME + ";";
+        final String CREATE_CLIENT_DB            = "CREATE DATABASE IF NOT EXISTS " + DATABASE_NAME + ";";
 
-        try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
+        try (Connection connection = DriverManager.getConnection(NEW_DB_URI, DB_USER, DB_PW)) {
             try (PreparedStatement createDB = connection.prepareStatement(CREATE_CLIENT_DB)) {
 
                 createDB.execute();
@@ -58,7 +61,6 @@ public final class DatabaseHelper {
                 + COLUMN_CLIENT_ID + " BIGINT AUTO_INCREMENT NOT NULL,"
                 + COLUMN_CLIENT_FIRSTNAME + " VARCHAR(30) NOT NULL,"
                 + COLUMN_CLIENT_LASTNAME + " VARCHAR(40) NOT NULL,"
-                + COLUMN_CLIENT_PIN + " TEXT NOT NULL,"
                 + "PRIMARY KEY clientId_pk (" + COLUMN_CLIENT_ID + "));";
 
         final String CREATE_ACCOUNT_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ACCOUNTS + "("
@@ -79,14 +81,26 @@ public final class DatabaseHelper {
                 + "FOREIGN KEY clientId_fk (" + COLUMN_TRANSACTIONS_CLIENT_ID + ") REFERENCES " + TABLE_CLIENTS + " ("
                 + COLUMN_TRANSACTIONS_CLIENT_ID + "));";
 
+        final String CREATE_PW_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_PW + "("
+                + COLUMN_CLIENT_ID + " BIGINT NOT NULL,"
+                + COLUMN_SALT_VAL + " VARCHAR(31) NOT NULL,"
+                + COLUMN_PIN + " TEXT NOT NULL,"
+                + "PRIMARY KEY salt_pk (" + COLUMN_SALT_VAL + "),"
+                + "FOREIGN KEY clientId_fk (" + COLUMN_CLIENT_ID + ") REFERENCES " + TABLE_CLIENTS + " ("
+                + COLUMN_CLIENT_ID + "));";
+
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
             try (PreparedStatement createClientStmt = connection.prepareStatement(CREATE_CLIENT_TABLE);
                 PreparedStatement createAccountStmt = connection.prepareStatement(CREATE_ACCOUNT_TABLE);
-                PreparedStatement createTransactionStmt = connection.prepareStatement(CREATE_TRANSACTION_TABLE)) {
+                PreparedStatement createTransactionStmt = connection.prepareStatement(CREATE_TRANSACTION_TABLE);
+                PreparedStatement createEncryptStmt = connection.prepareStatement(CREATE_PW_TABLE)) {
+
                 connection.setAutoCommit(false);
                 createClientStmt.execute();
                 createAccountStmt.execute();
                 createTransactionStmt.execute();
+                createEncryptStmt.execute();
+
             }
             connection.commit();
         } catch (SQLException ex) {

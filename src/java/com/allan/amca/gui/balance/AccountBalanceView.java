@@ -5,6 +5,7 @@ import com.allan.amca.data.DaoFactory;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.gui.Frameable;
 import com.allan.amca.gui.Screen;
+import com.allan.amca.transaction.Transaction;
 import com.allan.amca.user.Client;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
  * Account balance subclass
  * @author allanaranzaso
  */
-public class AccountBalanceUI extends Screen implements Frameable {
+public class AccountBalanceView extends Screen implements Frameable {
     private JLabel              accountBalanceHeaderLabel;
     private JButton             printBalanceBtn;
     private JButton             printLastTransactionBtn;
@@ -33,7 +34,7 @@ public class AccountBalanceUI extends Screen implements Frameable {
         r.getPropertyValues();
     }
 
-    public AccountBalanceUI(final CardLayout layout, final JPanel pane) {
+    public AccountBalanceView(final CardLayout layout, final JPanel pane) {
         this.parentCardLayout = layout;
         this.parentPane = pane;
     }
@@ -72,27 +73,33 @@ public class AccountBalanceUI extends Screen implements Frameable {
 
     @Override
     public void addListeners() {
-        //TODO: determine the behaviour of these buttons
         returnBtn.addActionListener( event -> parentCardLayout.show(parentPane, r.SELECTION_PANEL()));
 
         printBalanceBtn.addActionListener( event -> {
-            // show dialog with current balance
             Dao<Client, Long> accountDao = DaoFactory.createDao(DaoType.ACCOUNT);
             BigDecimal balance = accountDao.retrieve(client.getClientID());
             JOptionPane.showMessageDialog(
                     frame,
-                    String.format("Your current balance is: $%s", balance),
-                    "Account Balance",
+                    String.format(r.CURRENT_BALANCE(), balance),
+                    r.ACCOUNT_BALANCE_TITLE(),
                     JOptionPane.INFORMATION_MESSAGE);
 
         });
         printTransactionsBtn.addActionListener( event -> {
-            // implement next iteration
+            // TODO: print last 5 transactions
+            // Create DAO.. for every element in HashMap.. print?
             JOptionPane.showMessageDialog(frame, "Not implemented yet");
         });
         printLastTransactionBtn.addActionListener( event -> {
-            // show dialog with last transaction made on the account
-            JOptionPane.showMessageDialog(frame, "Not implemented yet");
+            final Dao<Transaction, Long> transactionDao = DaoFactory.createDao(DaoType.TRANSACTION);
+            final Transaction lastTransaction = transactionDao.retrieve(client.getClientID());
+            JOptionPane.showMessageDialog(
+                    frame,
+                    String.format(r.LAST_TRANSACTION_DETAILS(),
+                            lastTransaction.getTransactionDate(), lastTransaction.getTransactionType(),
+                            lastTransaction.getTransactionAmount()),
+                    r.TRANSACTION_DETAILS_TITLE(),
+                    JOptionPane.INFORMATION_MESSAGE);
         });
     }
 

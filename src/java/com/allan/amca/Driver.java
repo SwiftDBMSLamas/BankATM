@@ -22,7 +22,8 @@ public class Driver {
         screen.frame.setSize(414, 496);
         screen.frame.setLocationRelativeTo(null);
         screen.frame.setVisible(true);
-        // Create databases
+        // Create database first
+        // Then create the tables
         DatabaseHelper.createDatabase();
     }
 }

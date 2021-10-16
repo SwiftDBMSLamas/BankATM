@@ -4,10 +4,10 @@ import com.allan.amca.data.Dao;
 import com.allan.amca.data.DaoFactory;
 import com.allan.amca.enums.DaoType;
 import com.allan.amca.gui.Frameable;
-import com.allan.amca.gui.menu.MenuUI;
+import com.allan.amca.gui.menu.MainMenuView;
 import com.allan.amca.gui.Screen;
-import com.allan.amca.gui.register.RegisterUI;
-import com.allan.amca.login.Login;
+import com.allan.amca.gui.register.RegisterView;
+import com.allan.amca.login.LoginViewModel;
 import com.allan.amca.user.Client;
 
 import javax.swing.*;
@@ -16,10 +16,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 /**
- * Login screen subclass
+ * LoginViewModel screen subclass
  * @author allanaranzaso
  */
-public class LoginUI extends Screen implements Frameable {
+public class LoginView extends Screen implements Frameable {
     private static final int        SEND_CLIENT_REQUEST = 1;
     private static JTextField       clientCardInputField;
     private static JPasswordField   clientPINPasswordField;
@@ -33,7 +33,7 @@ public class LoginUI extends Screen implements Frameable {
     private GridBagConstraints      constraints;
     private JPanel                  keyPanel;
     private Client                  client;
-    private final Login login       = Login.getInstance();
+    private final LoginViewModel loginViewModel = LoginViewModel.getInstance();
     private final LoginResources r  = new LoginResources();
 
     {
@@ -41,7 +41,7 @@ public class LoginUI extends Screen implements Frameable {
     }
 
 
-    public LoginUI() {
+    public LoginView() {
         super();
     }
 
@@ -81,12 +81,12 @@ public class LoginUI extends Screen implements Frameable {
         constraints.gridy = 3;
         loginPanel.add(clientPINPasswordField, constraints);
 
-        // Login Btn
+        // LoginViewModel Btn
         constraints.gridwidth = 1;
         constraints.gridy = 4;
         loginPanel.add(loginBtn, constraints);
 
-        // Register Btn
+        // RegisterViewModel Btn
         constraints.gridwidth = 1;
         constraints.gridy = 5;
         loginPanel.add(registerBtn, constraints);
@@ -117,7 +117,7 @@ public class LoginUI extends Screen implements Frameable {
     @Override
     public void addListeners() {
         registerBtn.addActionListener( evt -> {
-            final Screen registerScreen = new RegisterUI(parentCardLayout, parentPane);
+            final Screen registerScreen = new RegisterView(parentCardLayout, parentPane);
             registerScreen.createUI();
             frame.setTitle(r.LOGIN_REGISTER_FRAME());
             System.out.println(frame.getTitle());
@@ -125,12 +125,12 @@ public class LoginUI extends Screen implements Frameable {
 
         loginBtn.addActionListener(evt -> {
             final boolean userAuthenticated;
-            final MenuUI menuUI;
+            final MainMenuView menuUI;
             final String clientCardStr  = clientCardInputField.getText();
             final long clientCard       = Long.parseLong(clientCardStr);
             final String pinStr         = String.valueOf(clientPINPasswordField.getPassword());
 
-            userAuthenticated = login.login(clientCard, pinStr);
+            userAuthenticated = loginViewModel.login(clientCard, pinStr);
             if (!userAuthenticated) {
                 JOptionPane.showMessageDialog(frame,
                                     r.LOGIN_FAIL_MESSAGE(),
@@ -169,7 +169,7 @@ public class LoginUI extends Screen implements Frameable {
                 client = account.retrieve(clientCard);
                 Client.sendClient(SEND_CLIENT_REQUEST, client);
 
-                menuUI = new MenuUI(parentCardLayout, parentPane);
+                menuUI = new MainMenuView(parentCardLayout, parentPane);
                 menuUI.createUI();
                 clientCardInputField.setText(null);
                 clientPINPasswordField.setText(null);

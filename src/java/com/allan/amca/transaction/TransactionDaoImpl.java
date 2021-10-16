@@ -89,18 +89,16 @@ public class TransactionDaoImpl<T, N> extends DaoAbstract<Transaction, Long> {
 
     /**
      * Retrieve a transaction object from the database.
-     * @param toRetrieve the transaction id to retrieve
+     * @param clientIdToRetrieve the transaction id to retrieve
      * @return transaction object with information on the transaction
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected Transaction readRecord(Long toRetrieve) {
+    protected Transaction readRecord(Long clientIdToRetrieve) {
         final String QUERY = "SELECT transaction_id, transaction_type, transaction_date, transaction_amount " +
-                "FROM transactions " +
-                "WHERE transaction_id = ?";
+                "FROM transactions WHERE client_id = ? ORDER BY client_id DESC LIMIT 1";
         Transaction retrievedTransaction    = null;
-        final int transactionID             = toRetrieve.intValue();
-        final int TRANSACTION_ID_PARAM      = 1;
+        final int CLIENT_ID_PARAM      = 1;
         final int TRANSACTION_TYPE_PARAM    = 2;
         final int TRANSACTION_DATE_PARAM    = 3;
         final int TRANSACTION_AMT_PARAM     = 4;
@@ -108,7 +106,7 @@ public class TransactionDaoImpl<T, N> extends DaoAbstract<Transaction, Long> {
 
         try (Connection connection = DriverManager.getConnection(URI, DB_USER, DB_PW)) {
             try (PreparedStatement retrieveStmt = connection.prepareStatement(QUERY)) {
-                retrieveStmt.setInt(TRANSACTION_ID_PARAM, transactionID);
+                retrieveStmt.setLong(CLIENT_ID_PARAM, clientIdToRetrieve);
 
                 rs = retrieveStmt.executeQuery();
                 if (rs.next()) {
@@ -130,6 +128,7 @@ public class TransactionDaoImpl<T, N> extends DaoAbstract<Transaction, Long> {
         }
         return retrievedTransaction;
     }
+
 
     /**
      * Deletes a transaction off the database

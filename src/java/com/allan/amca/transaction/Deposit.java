@@ -1,5 +1,7 @@
 package com.allan.amca.transaction;
 
+import com.allan.amca.enums.TransactionType;
+
 import java.math.BigDecimal;
 
 /**
@@ -25,5 +27,11 @@ public class Deposit extends Transaction {
     @Override
     protected BigDecimal calculate(final BigDecimal currentBalance, final BigDecimal amount) {
         return currentBalance.add(amount);
+    }
+
+
+    public static void main(String[] args) {
+        Transaction test = TransactionFactory.createTransaction(TransactionType.DEPOSIT);
+        test.performTransaction(4519011123012070L, BigDecimal.valueOf(200));
     }
 }

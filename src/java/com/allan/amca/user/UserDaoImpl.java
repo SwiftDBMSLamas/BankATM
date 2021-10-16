@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
-@SuppressWarnings("ALL")
 public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
 //    Resources
     private static final String DB_URI          = DataResources.getDBUri();
@@ -48,8 +47,8 @@ public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
      */
     @Override
     protected boolean addRecord(@NotNull final Client user)  {
-        final String ADD_USER       = ADD_NEW_USER + " (first_name, last_name, pin) " +
-                                        "VALUES (?, ?, ?);";
+        final String ADD_USER       = ADD_NEW_USER + " (first_name, last_name) " +
+                                        "VALUES (?, ?);";
         boolean clientAdded         = false;
         final int recordsInserted;
 
@@ -58,7 +57,6 @@ public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
                 connection.setAutoCommit(false);
                 addClient.setString(FIRST_NAME_PARAM, user.getFirstName());
                 addClient.setString(LAST_NAME_PARAM, user.getLastName());
-                addClient.setString(PIN_PARAM, user.getPIN());
 
                 recordsInserted = addClient.executeUpdate();
                 if (recordsInserted > NO_RECORDS) {
@@ -166,9 +164,8 @@ public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
         clientID    = resultSet.getLong(CLIENT_ID_COL);
         firstName   = resultSet.getString(FIRST_NAME_COL);
         lastName    = resultSet.getString(LAST_NAME_COL);
-        pin         = resultSet.getString(PIN_COL);
 
-        client = UserFactory.createUser(firstName, lastName, pin);
+        client = UserFactory.createUser(firstName, lastName);
         client.setClientID(clientID);
 
         return client;
@@ -185,8 +182,7 @@ public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
         final int recordsUpdated;
         final String UPDATE_USER = "UPDATE " + TABLE_CLIENT + " " +
                                     "SET " + COLUMN_CLIENT_FIRSTNAME + " = ?, "
-                                    + COLUMN_CLIENT_LASTNAME + " = ?, "
-                                    + COLUMN_CLIENT_PIN + " = ? WHERE client_id = ?;";
+                                    + COLUMN_CLIENT_LASTNAME + " = ? WHERE client_id = ?;";
         boolean clientIsUpdated = false;
 
         try (Connection connection = DriverManager.getConnection(DB_URI, DB_USER, DB_PW)) {
@@ -195,7 +191,6 @@ public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
 
                 updateClient.setString(FIRST_NAME_PARAM, user.getFirstName());
                 updateClient.setString(LAST_NAME_PARAM, user.getLastName());
-                updateClient.setString(PIN_PARAM, user.getPIN());
                 updateClient.setLong(CLIENT_ID_PARAM, user.getClientID());
 
                 recordsUpdated = updateClient.executeUpdate();

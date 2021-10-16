@@ -14,13 +14,13 @@ import com.allan.amca.user.UserFactory;
  * your traditional ATM... use this class to create an account.
  * @author allanaranzaso
  */
-public class Register {
+public class RegisterViewModel {
 
-    private static final Register instance = new Register();
+    private static final RegisterViewModel instance = new RegisterViewModel();
     private static final int NEW_CLIENT_SEND_REQ = 1;
     private static final int SALT_LENGTH = 30;
     // prevent from instantiating this class. See newInstance()
-    private Register() {}
+    private RegisterViewModel() {}
 
     /**
      * Creates an account for the new client. This is essentially what would happen if you opened an account at the bank.
@@ -36,7 +36,8 @@ public class Register {
         boolean registerSuccess;
         final Client newClient;
 
-        registerSuccess = dao.create(UserFactory.createUser(firstName, lastName, pin));
+        validatePin(pin);
+        registerSuccess = dao.create(UserFactory.createUser(firstName, lastName));
         if (registerSuccess) {
             newClient = dao.retrieve(UserDaoImpl.getNewClientIDFromDB());
             final String salt = PINCryptUtils.getSalt(SALT_LENGTH);
@@ -49,12 +50,18 @@ public class Register {
         return registerSuccess;
     }
 
+    private static void validatePin(final String pin) {
+        if (pin == null || pin.length() < 4 || pin.isBlank()) {
+            throw new IllegalArgumentException("PIN must be minimum 4 digits or more");
+        }
+    }
+
     private void openAccount(final Client clientToAdd) {
         Dao<Client, Long> accountDao = DaoFactory.createDao(DaoType.ACCOUNT);
         accountDao.create(clientToAdd);
     }
     // Singleton access
-    public static Register newInstance() {
+    public static RegisterViewModel newInstance() {
         return instance;
     }
 }

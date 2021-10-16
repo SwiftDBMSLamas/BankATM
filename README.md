@@ -4,7 +4,7 @@ This project is a practice implementation of an ATM bank machine application wri
 
 ***Don't care about any of my explanations? Skip down to "Getting started" :)***
 
-**If you have ANY feedback, please feel free to share. I would love feedback as that will make me better in the long run!**
+**If you have ANY feedback, please feel free to share by reporting an issue. I would love feedback as that will make me better in the long run!**
 
 ## Objective
 
@@ -68,11 +68,11 @@ To run the application on your machine:
 1. `clone` the repo onto your local drive
 2. Install or start up your MySQL local server - your localhost url may be different, if that is the case- you will need to modify the `res_en.properties` file and change the database url to your local url
 3. Run the Driver.java file - upon start, the application will create the tables necessary to run the application
-4. When the application runs, register an account first by clicking the `Create Account` button so that you can log in and play around with the UI
+4. When the application runs, registerViewModel an account first by clicking the `Create Account` button so that you can log in and play around with the UI
 
 The UI is very simple as this was my first time using Java's Swing library. There's no fancy transitions or animations as that was not the intention of this project.
 
 
-You will need to "register" for an account by clicking the `Create Account` button and filling out the form. 
+You will need to "registerViewModel" for an account by clicking the `Create Account` button and filling out the form. 
 Successful registration will submit this information to the database for later retrieval. You can then use this to log into the application.
 Your `Client ID` will be displayed to you, or you can simply access the database and look for your Client ID.

@@ -25,9 +25,9 @@ public class PINCryptUtils {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
-    private static final int ENCRYPTED_PIN_PARAM = 1;
+    private static final int ENCRYPTED_PIN_PARAM = 3;
     private static final int SALT_PARAM = 2;
-    private static final int CLIENT_ID_PARAM = 3;
+    private static final int CLIENT_ID_PARAM = 1;
     private static final int NO_RECORDS_UPDATED = 0;
 
     /**
@@ -44,7 +44,7 @@ public class PINCryptUtils {
         return new String(returnValue);
     }
 
-    private static byte[] hash(char[] pin, byte[] salt) {
+    private static byte[] hash(final char[] pin, final byte[] salt) {
         PBEKeySpec spec = new PBEKeySpec(pin, salt, ITERATIONS, KEY_LENGTH);
         Arrays.fill(pin, Character.MIN_VALUE);
         try {
@@ -93,20 +93,20 @@ public class PINCryptUtils {
      * @param securePin The encrypted PIN to store in the database
      * @param salt The salt value to store in the database
      */
-    public static void updatePinAndSalt(String securePin, String salt) {
+    public static void updatePinAndSalt(final String securePin, final String salt) {
         final String URI            = DataResources.getDBUri();
         final String DB_USER        = DataResources.getDBUsername();
         final String DB_PW          = DataResources.getDBPassword();
         final int recordsUpdated;
-        final String UPDATE_PIN_SALT_QUERY = "UPDATE clients SET pin = ?, salt = ? WHERE client_id = ?";
+        final String UPDATE_PIN_SALT_QUERY = "INSERT INTO pins VALUES(?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(URI, DB_USER, DB_PW)) {
             try (PreparedStatement updatePinStmt = connection.prepareStatement(UPDATE_PIN_SALT_QUERY)) {
                 connection.setAutoCommit(false);
 
-                updatePinStmt.setString(ENCRYPTED_PIN_PARAM, securePin);
-                updatePinStmt.setString(SALT_PARAM, salt);
                 updatePinStmt.setLong(CLIENT_ID_PARAM, UserDaoImpl.getNewClientIDFromDB());
+                updatePinStmt.setString(SALT_PARAM, salt);
+                updatePinStmt.setString(ENCRYPTED_PIN_PARAM, securePin);
 
                 recordsUpdated = updatePinStmt.executeUpdate();
                 if (recordsUpdated == NO_RECORDS_UPDATED) {

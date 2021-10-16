@@ -3,8 +3,6 @@ package com.allan.amca.junit.data;
 import com.allan.amca.data.Dao;
 import org.junit.jupiter.api.function.Executable;
 
-import java.sql.SQLException;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,19 +12,19 @@ public abstract class DaoAbstractTest {
     protected <T> void update(final Dao<T, Number>  dao,
                               final Number          number,
                               final T               value,
-                              final boolean         expectedResult) throws SQLException {
+                              final boolean         expectedResult) {
         assertThat(dao.update(value, number), equalTo(expectedResult));
     }
 
     protected <T> void delete(final Dao<T, Number>  dao,
                               final T               value,
-                              final boolean         expectedResult) throws SQLException {
+                              final boolean         expectedResult) {
         assertThat(dao.delete(value), equalTo(expectedResult));
     }
 
     protected <T> void create(final Dao<T, Number>  dao,
                               final T               value,
-                              final boolean         expectedResult) throws SQLException {
+                              final boolean         expectedResult) {
         assertThat(dao.create(value), equalTo(expectedResult));
     }
 

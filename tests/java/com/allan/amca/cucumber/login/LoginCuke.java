@@ -1,13 +1,13 @@
 package com.allan.amca.cucumber.login;
 
-import com.allan.amca.login.Login;
+import com.allan.amca.login.LoginViewModel;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 
 public class LoginCuke {
-    Login login = Login.getInstance();
+    LoginViewModel loginViewModel = LoginViewModel.getInstance();
     Long clientC;
     String password;
 
@@ -20,13 +20,13 @@ public class LoginCuke {
         clientC = clientCard;
         this.password = password;
     }
-    @Then("Login should be successful")
+    @Then("LoginViewModel should be successful")
     public void login_should_be_successful() {
-//        assertTrue(login.login(clientC, password));
+//        assertTrue(loginViewModel.loginViewModel(clientC, password));
     }
 
-    @Then("Login should fail")
+    @Then("LoginViewModel should fail")
     public void login_should_fail() {
-//        assertFalse(login.login(clientC, password));
+//        assertFalse(loginViewModel.loginViewModel(clientC, password));
     }
 }

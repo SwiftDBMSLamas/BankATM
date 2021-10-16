@@ -15,60 +15,51 @@ class ClientTest extends PersonTest {
     @Test
     void getClientID() {
         Dao<Client, Long> clientDao = DaoFactory.createDao(DaoType.USER);
-        Client client1 =  clientDao.retrieve(4519011123012001L);
-        Client client2 =  clientDao.retrieve(4519011123012002L);
-        Client client3 =  clientDao.retrieve(4519011123012003L);
-        Client client4 =  clientDao.retrieve(4519011123012004L);
-        Client client5 =  clientDao.retrieve(4519011123012005L);
+        Client client1 =  clientDao.retrieve(4500123410000000L);
+        Client client2 =  clientDao.retrieve(4500123410000002L);
+        Client client3 =  clientDao.retrieve(4500123410000003L);
+        Client client4 =  clientDao.retrieve(4500123410000004L);
+        Client client5 =  clientDao.retrieve(4500123410000005L);
 
-        getClientIDFromDB(client1, 4519011123012001L);
-        getClientIDFromDB(client2,4519011123012002L);
-        getClientIDFromDB(client3, 4519011123012003L);
-        getClientIDFromDB(client4, 4519011123012004L);
-        getClientIDFromDB(client5, 4519011123012005L);
+        getClientIDFromDB(client1, 4500123410000000L);
+        getClientIDFromDB(client2,4500123410000002L);
+        getClientIDFromDB(client3, 4500123410000003L);
+        getClientIDFromDB(client4, 4500123410000004L);
+        getClientIDFromDB(client5, 4500123410000005L);
     }
 
     @Test
     void getFirstName() {
-        getFirstName(new Client("Michael", "Smith", "1318"), "Michael");
-        getFirstName(new Client("Jane", "Smith", "1234"), "Jane");
-        getFirstName(new Client("James", "Nam", "1324"), "James");
-        getFirstName(new Client("Jason", "Kim", "2222"), "Jason");
-        getFirstName(new Client("Allan", "Aranzaso", "9999"), "Allan");
+        getFirstName(new Client("Michael", "Smith"), "Michael");
+        getFirstName(new Client("Jane", "Smith"), "Jane");
+        getFirstName(new Client("James", "Nam"), "James");
+        getFirstName(new Client("Jason", "Kim"), "Jason");
+        getFirstName(new Client("Allan", "Aranzaso"), "Allan");
     }
 
     @Test
     void getLastName() {
-        getLastName(new Client("Michael", "Smith", "1318"), "Smith");
-        getLastName(new Client("Jane", "Smith", "1234"), "Smith");
-        getLastName(new Client("James", "Nam", "1324"), "Nam");
-        getLastName(new Client("Jason", "Kim", "2222"), "Kim");
-        getLastName(new Client("Allan", "Aranzaso", "1111"), "Aranzaso");
-    }
-
-    @Test
-    void getPin() {
-        getPin(new Client("Michael", "Smith", "1318"), "1318");
-        getPin(new Client("Jane", "Smith", "1200"), "1200");
-        getPin(new Client("James", "Nam", "1234"), "1234");
-        getPin(new Client("Jason", "Kim", "432111"), "432111");
-        getPin(new Client("Allan", "Aranzaso", "55555"), "55555");
+        getLastName(new Client("Michael", "Smith"), "Smith");
+        getLastName(new Client("Jane", "Smith"), "Smith");
+        getLastName(new Client("James", "Nam"), "Nam");
+        getLastName(new Client("Jason", "Kim"), "Kim");
+        getLastName(new Client("Allan", "Aranzaso"), "Aranzaso");
     }
 
     @Test
     void sendClientTest() {
 
-        Client client1 = UserFactory.createUser("Jane", "Doe", "1234");
-        Client client2 = UserFactory.createUser("John", "Appleseed", "0613");
+        Client client1 = UserFactory.createUser("Jane", "Doe");
+        Client client2 = UserFactory.createUser("John", "Appleseed");
 
-        test(client1, 1);
-        test(client2, 1);
+        testClientMap(client1, 1);
+        testClientMap(client2, 1);
     }
 
     @Test
     void sendClientBadTest() {
-        Client client1 = UserFactory.createUser("Sam", "Song", "0613");
-        Client client2 = UserFactory.createUser("Sam", "San", "1234");
+        Client client1 = UserFactory.createUser("Sam", "Song");
+        Client client2 = UserFactory.createUser("Sam", "San");
 
         badSendClient(client1, 0, IllegalArgumentException.class, "Request or Client argument is invalid.");
         badSendClient(client1, 2, IllegalArgumentException.class, "Request or Client argument is invalid.");
@@ -84,7 +75,7 @@ class ClientTest extends PersonTest {
 
     @Test
     void disposeTest() {
-        Client client1 = UserFactory.createUser("Sam", "Song", "1234");
+        Client client1 = UserFactory.createUser("Sam", "Song");
 
         Client.sendClient(1, client1);
         Client.dispose();
@@ -93,27 +84,17 @@ class ClientTest extends PersonTest {
 
     @Test
     void newClientTest() {
-        Client client1 = UserFactory.createUser("Sam", "Song", "1234");
+        Client client1 = UserFactory.createUser("Sam", "Song");
 
         assertThat(client1, equalTo(client1));
     }
 
     @Test
     void badClient() {
-        badClientConstructor(null, "Nam", "1234",
-                IllegalArgumentException.class, "First name cannot be empty");
-        badClientConstructor("Eric", null, "1234",
-                IllegalArgumentException.class, "Last name cannot be empty");
-        badClientConstructor("Eric", "Nam", "111",
-                IllegalArgumentException.class, "PIN must be minimum 4 digits or more");
-        badClientConstructor("", "Nam", "1234",
-                IllegalArgumentException.class, "First name cannot be empty");
-        badClientConstructor("Eric", "", "1234",
-                IllegalArgumentException.class, "Last name cannot be empty");
-        badClientConstructor("Eric", "Nam", "1",
-                IllegalArgumentException.class, "PIN must be minimum 4 digits or more");
-        badClientConstructor("Eric", "Nam", "12",
-                IllegalArgumentException.class, "PIN must be minimum 4 digits or more");
+        badClientConstructor(null, "Nam", IllegalArgumentException.class, "First name cannot be empty");
+        badClientConstructor("Eric", null, IllegalArgumentException.class, "Last name cannot be empty");
+        badClientConstructor("", "Nam", IllegalArgumentException.class, "First name cannot be empty");
+        badClientConstructor("Eric", "", IllegalArgumentException.class, "Last name cannot be empty");
     }
 
 }

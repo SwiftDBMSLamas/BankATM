@@ -28,6 +28,7 @@ public class PINCryptUtils {
     private static final int ENCRYPTED_PIN_PARAM = 3;
     private static final int SALT_PARAM = 2;
     private static final int CLIENT_ID_PARAM = 1;
+
     private static final int NO_RECORDS_UPDATED = 0;
 
     /**
@@ -94,11 +95,13 @@ public class PINCryptUtils {
      * @param salt The salt value to store in the database
      */
     public static void updatePinAndSalt(final String securePin, final String salt) {
+
         final String URI            = DataResources.getDBUri();
         final String DB_USER        = DataResources.getDBUsername();
         final String DB_PW          = DataResources.getDBPassword();
         final int recordsUpdated;
         final String UPDATE_PIN_SALT_QUERY = "INSERT INTO pins VALUES(?, ?, ?)";
+
 
         try (Connection connection = DriverManager.getConnection(URI, DB_USER, DB_PW)) {
             try (PreparedStatement updatePinStmt = connection.prepareStatement(UPDATE_PIN_SALT_QUERY)) {

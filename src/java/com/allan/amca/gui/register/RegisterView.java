@@ -6,6 +6,7 @@ import com.allan.amca.gui.menu.MainMenuView;
 import com.allan.amca.register.RegisterViewModel;
 import com.allan.amca.user.Client;
 
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -93,6 +94,7 @@ public class RegisterView extends Screen implements Frameable {
             final boolean registerSuccessful;
 
             try {
+
                 registerSuccessful = registerViewModel.register(firstName, lastName, pin);
 
                 if (registerSuccessful) {

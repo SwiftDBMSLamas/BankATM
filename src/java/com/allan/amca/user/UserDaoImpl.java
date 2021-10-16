@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
+
+@SuppressWarnings("ALL")
 public class UserDaoImpl<T, N> extends DaoAbstract<Client, Long> {
 //    Resources
     private static final String DB_URI          = DataResources.getDBUri();

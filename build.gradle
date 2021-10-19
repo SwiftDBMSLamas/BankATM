@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+group 'ca.allan'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['src/resources']
+        }
+    }
+}
+dependencies {
+    implementation(
+            'junit:junit:4.12',
+            'org.junit.jupiter:junit-jupiter:5.7.0',
+            'io.cucumber:cucumber-java:7.0.0',
+            'io.cucumber:cucumber-junit:7.0.0',
+    )
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize('1G')
+}
